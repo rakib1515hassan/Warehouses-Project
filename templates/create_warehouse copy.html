@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+
+
+{% block main %}
+
+    <!-- Register start -->
+    <div class="container-xxl mt-5 py-5 register">
+      <div class="container">
+          <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+              <h6 class="section-title bg-white text-center text-primary px-3"></h6>
+              <h1 class="mb-5 mt-5">Add New Warehouse</h1>
+          </div>
+          <div class="row">
+              <div class="col-lg-6 offset-lg-3">
+                  <form name="add_warehouse" method="POST">
+                      {% csrf_token %}
+                      <div class="row">
+
+                          <div class="col-12 mb-4">
+                            <label for="id_name" class="form-label">Warehouse Location</label>
+                            <input class="form-control" type="text" id="location" name="location" placeholder="Enter a location...">
+                            <datalist id="location-suggestions"></datalist>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_name" class="form-label">Warehouse Name</label>
+                            <input name="name" type="text" class="form-control" id="id_name" required>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_size" class="form-label">Warehouse Size</label>
+                            <input name="size" type="text" class="form-control" id="id_size" required>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_price" class="form-label">Warehouse Price</label>
+                            <input name="price" type="text" class="form-control" id="id_price" required>
+                          </div>
+                          
+                          <div class="col-12 mb-4">
+                            <label for="id_availability" class="form-label">Availability</label>
+                            <select class="form-select" name="availability" id="id_availability" required>
+                              {% for avil in availability %}
+                              <option value="{{ avil.id }}">{{ avil.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_accessibility" class="form-label">Accessibility:</label>
+                            <select class="form-select" name="accessibility" id="id_accessibility" required>
+                              {% for access in accessibility %}
+                              <option value="{{ access.id }}">{{ access.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_warehouse_type" class="form-label">Warehouse Type:</label>
+                            <select class="form-select" name="warehouse_type" id="id_warehouse_type" required>
+                              {% for wtype in warehouse_type %}
+                              <option value="{{ wtype.id }}">{{ wtype.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_storage_temperature" class="form-label">Storage temperature</label>
+                            <select class="form-select" name="storage_temperature" id="id_storage_temperature" required>
+                              {% for stem in storage_temperature %}
+                              <option value="{{ stem.id }}">{{ stem.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_workforce" class="form-label">Workforce</label>
+                            <select class="form-select" name="workforce" id="id_workforce" required>
+                              
+                              {% for workf in workforce %}
+                              <option value="{{ workf.id }}">{{ workf.name }}</option>
+                              {% endfor %}
+                                
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_warehouse_classification" class="form-label">Warehouse Classification</label>
+                            <select class="form-select" name="warehouse_classification" id="id_warehouse_classification" required>
+                              
+                              {% for wclass in warehouse_Classification %}
+                              <option value="{{ wclass.id }}">{{ wclass.name }}</option>
+                              {% endfor %}
+                                
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_storage_space_type" class="form-label">Storage space type</label>
+                            <select class="form-select" name="storage_space_type" id="id_storage_space_type" multiple >
+                              
+                              {% for storage_s_type in storage_space_type %}
+                              <option value="{{ storage_s_type.id }}">{{ storage_s_type.name }}</option>
+                              {% endfor %}
+                            </select>
+                            <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_equipment" class="form-label">Equipment</label>
+                            <select class="form-select" name="equipment" id="id_equipment" multiple >
+                              {% for equipment in equipments %}
+                              <option value="{{ equipment.id }}">{{ equipment.name }}</option>
+                              {% endfor %}
+                            </select>
+                            <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_security" class="form-label">Security</label>
+                            <select class="form-select" name="security" id="id_security" multiple >
+                              {% for secu in security %}
+                              <option value="{{ secu.id }}">{{ secu.name }}</option>
+                              {% endfor %}
+                            </select>
+                            <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_services_offered" class="form-label">Services offered</label>
+                            <select class="form-select" name="services_offered" id="id_services_offered" multiple >
+                              {% for service_offer in services_Offered %}
+                              <option value="{{ service_offer.id }}">{{ service_offer.name }}</option>
+                              {% endfor %}
+                            </select>
+                            <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_order_taking_time" class="form-label">Order taking time</label>
+                            <select class="form-select" name="order_taking_time" id="id_order_taking_time" required>
+                              {% for order_taking in order_taking_time %}
+                              <option value="{{ order_taking.id }}">{{ order_taking.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_flexibility_transport_appointments" class="form-label">Flexibility transport appointments</label>
+                            <input name="flexibility_transport_appointments" type="text" class="form-control" id="id_flexibility_transport_appointments" required>
+                          </div>
+
+                          
+                          <div class="col-12 mb-4">
+                            <label for="id_flexible_hours" class="form-label">Flexible hours:</label>
+                            <select class="form-select" name="flexible_hours" id="id_flexible_hours" required>
+                              {% for flexible in flexible_hours %}
+                              <option value="{{ flexible.id }}">{{ flexible.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_authorization_access_people_outside" class="form-label">Authorization access people outside:</label>
+                            <input name="authorization_access_people_outside" type="text" class="form-control" id="id_authorization_access_people_outside" required>
+                          </div>
+                      
+
+                          <div class="col-12 mb-4">
+                            <label for="id_Insurance" class="form-label">Insurance</label>
+                            <select class="form-select" name="Insurance" id="id_Insurance" required>
+                              {% for in in insurance %}
+                              <option value="{{ in.id }}">{{ in.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="col-12 mb-4">
+                            <label for="id_photos" class="form-label">Photos</label>
+                            <input name="photos" type="file" class="form-control" id="id_photos" multiple>
+                          </div>
+
+                          <input type="hidden" name="location_coordinates" id="location-coordinates">
+                 
+
+                          <div class="col-12 mb-4 mt-3">
+                              <button class="btn btn-primary w-100 py-3" type="submit">Create a Warehouse</button>
+                          </div>
+  
+                      </div>
+                  </form>
+
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- Register end -->
+
+
+<!--     
+   <h1 class="mt-5">Create Warehouse</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        <input type="text" id="location" name="location" placeholder="Enter a location...">
+        <datalist id="location-suggestions"></datalist>
+      {{ form.as_p }}
+          {% if photos %}
+        <h3>Existing photos:</h3>
+        <div class="photos">
+          {% for photo in photos %}
+          <div class="photo">
+            <img src="{{ photo.photo.url }}" alt="{{ photo.warehouse.name }}">
+            <input type="checkbox" name="delete_photos" value="{{ photo.id }}">Delete
+          </div>
+          {% endfor %}
+        </div>
+    {% endif %}
+  
+      <button type="submit">Submit</button>
+    </form> -->
+
+  {% endblock main %}
+
+{% block script %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvipoA5dBlxWXuXctizbINF1YYuWUzvBQ&libraries=places"></script>
+  
+
+<script>
+      var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
+      autocomplete.addListener('place_changed', function() {
+        var place = autocomplete.getPlace();
+        var locationCoordinatesInput = document.getElementById('location-coordinates');
+        locationCoordinatesInput.value = place.geometry.location.lat() + ',' + place.geometry.location.lng();
+        console.log(place.geometry.location.lat() + ',' + place.geometry.location.lng());
+        var predictions = place.predictions;
+        var suggestionsList = document.getElementById('location-suggestions');
+        suggestionsList.innerHTML = '';
+        predictions.forEach(function(prediction) {
+          var option = document.createElement('option');
+          option.value = prediction.description;
+          suggestionsList.appendChild(option);
+        });
+      });
+    </script>
+  {% endblock script %}

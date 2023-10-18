@@ -1,0 +1,975 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.111.3">
+  <title>Dashboard Template · Bootstrap v5.3</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+    integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      width: 100%;
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+      --bd-violet-bg: #712cf9;
+      --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+      --bs-btn-font-weight: 600;
+      --bs-btn-color: var(--bs-white);
+      --bs-btn-bg: var(--bd-violet-bg);
+      --bs-btn-border-color: var(--bd-violet-bg);
+      --bs-btn-hover-color: var(--bs-white);
+      --bs-btn-hover-bg: #6528e0;
+      --bs-btn-hover-border-color: #6528e0;
+      --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+      --bs-btn-active-color: var(--bs-btn-hover-color);
+      --bs-btn-active-bg: #5a23c8;
+      --bs-btn-active-border-color: #5a23c8;
+    }
+
+    .bd-mode-toggle {
+      z-index: 1500;
+    }
+
+    body {
+      color: #000000
+    }
+
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      padding-top: 100px;
+      /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.9);
+      /* Black w/ opacity */
+    }
+
+    /* Modal Content (image) */
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 1000px;
+    }
+
+
+    /* Add Animation */
+    .modal-content,
+    #caption {
+      -webkit-animation-name: zoom;
+      -webkit-animation-duration: 0.6s;
+      animation-name: zoom;
+      animation-duration: 0.6s;
+    }
+
+    @-webkit-keyframes zoom {
+      from {
+        -webkit-transform: scale(0)
+      }
+
+      to {
+        -webkit-transform: scale(1)
+      }
+    }
+
+    @keyframes zoom {
+      from {
+        transform: scale(0)
+      }
+
+      to {
+        transform: scale(1)
+      }
+    }
+
+    /* The Close Button */
+    .close {
+      position: absolute;
+      top: 50px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .users-container .chat-search-box {
+      -webkit-border-radius: 3px 0 0 0;
+      -moz-border-radius: 3px 0 0 0;
+      border-radius: 3px 0 0 0;
+      padding: .75rem 1rem;
+    }
+
+    .users-container .chat-search-box .input-group .form-control {
+      -webkit-border-radius: 2px 0 0 2px;
+      -moz-border-radius: 2px 0 0 2px;
+      border-radius: 2px 0 0 2px;
+      border-right: 0;
+      width: 80%;
+    }
+
+    .users-container .chat-search-box .input-group .form-control:focus {
+      border-right: 0;
+    }
+
+    .users-container .chat-search-box .input-group .input-group-btn .btn {
+      -webkit-border-radius: 0 2px 2px 0;
+      -moz-border-radius: 0 2px 2px 0;
+      border-radius: 0 2px 2px 0;
+      margin: 0;
+    }
+
+    .users-container .chat-search-box .input-group .input-group-btn .btn i {
+      font-size: 1.2rem;
+      line-height: 100%;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 767px) {
+      .users-container .chat-search-box {
+        display: none;
+      }
+
+      .mobile-chat {
+        display: none;
+      }
+
+
+    }
+
+    .is_active {
+      display: block !important;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .chat-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .chat-container {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    .chat-container {
+      height: 460px;
+      overflow: scroll;
+    }
+
+    .messages-wrapper {
+      height: 100%;
+    }
+
+    .card-footer1 {
+      border-top: 0 !important;
+      bottom: 40px;
+      position: relative;
+      width: 100%;
+    }
+
+    .contacts .active {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    /************************************************
+	************************************************
+									Users Container
+	************************************************
+************************************************/
+
+    .users-container {
+      position: relative;
+      padding: 1rem 0;
+      height: 100%;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+      flex-direction: column;
+    }
+
+
+    /************************************************
+	************************************************
+											Users
+	************************************************
+************************************************/
+
+    .users {
+      padding: 0;
+    }
+
+    .users .person {
+      position: relative;
+      width: 100%;
+      padding: 10px 1rem;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f4f8;
+    }
+
+    .users .person:hover {
+      background-color: #ffffff;
+      /* Fallback Color */
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#e9eff5), to(#ffffff));
+      /* Saf4+, Chrome */
+      background-image: -webkit-linear-gradient(right, #e9eff5, #ffffff);
+      /* Chrome 10+, Saf5.1+, iOS 5+ */
+      background-image: -moz-linear-gradient(right, #e9eff5, #ffffff);
+      /* FF3.6 */
+      background-image: -ms-linear-gradient(right, #e9eff5, #ffffff);
+      /* IE10 */
+      background-image: -o-linear-gradient(right, #e9eff5, #ffffff);
+      /* Opera 11.10+ */
+      background-image: linear-gradient(right, #e9eff5, #ffffff);
+    }
+
+    .users .person.active-user {
+      background-color: #ffffff;
+      /* Fallback Color */
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f9fb), to(#ffffff));
+      /* Saf4+, Chrome */
+      background-image: -webkit-linear-gradient(right, #f7f9fb, #ffffff);
+      /* Chrome 10+, Saf5.1+, iOS 5+ */
+      background-image: -moz-linear-gradient(right, #f7f9fb, #ffffff);
+      /* FF3.6 */
+      background-image: -ms-linear-gradient(right, #f7f9fb, #ffffff);
+      /* IE10 */
+      background-image: -o-linear-gradient(right, #f7f9fb, #ffffff);
+      /* Opera 11.10+ */
+      background-image: linear-gradient(right, #f7f9fb, #ffffff);
+    }
+
+    .users .person:last-child {
+      border-bottom: 0;
+    }
+
+    .users .person .user {
+      display: inline-block;
+      position: relative;
+      margin-right: 10px;
+    }
+
+    .users .person .user img {
+      width: 48px;
+      height: 48px;
+      -webkit-border-radius: 50px;
+      -moz-border-radius: 50px;
+      border-radius: 50px;
+    }
+
+    .users .person .user .status {
+      width: 10px;
+      height: 10px;
+      -webkit-border-radius: 100px;
+      -moz-border-radius: 100px;
+      border-radius: 100px;
+      background: #e6ecf3;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .users .person .user .status.online {
+      background: #9ec94a;
+    }
+
+    .users .person .user .status.offline {
+      background: #c4d2e2;
+    }
+
+    .users .person .user .status.away {
+      background: #f9be52;
+    }
+
+    .users .person .user .status.busy {
+      background: #fd7274;
+    }
+
+    .users .person p.name-time {
+      font-weight: 600;
+      font-size: .85rem;
+      display: inline-block;
+    }
+
+    .users .person p.name-time .time {
+      font-weight: 400;
+      font-size: .7rem;
+      text-align: right;
+      color: #8796af;
+    }
+
+    @media (max-width: 767px) {
+      .users .person .user img {
+        width: 30px;
+        height: 30px;
+      }
+
+    }
+
+
+    /************************************************
+	************************************************
+									Chat right side
+	************************************************
+************************************************/
+
+    .selected-user {
+      width: 100%;
+      padding: 0 15px;
+      min-height: 64px;
+      line-height: 64px;
+      border-bottom: 1px solid #e6ecf3;
+      -webkit-border-radius: 0 3px 0 0;
+      -moz-border-radius: 0 3px 0 0;
+      border-radius: 0 3px 0 0;
+    }
+
+    .selected-user span {
+      line-height: 100%;
+    }
+
+    .selected-user span.name {
+      font-weight: 700;
+    }
+
+    .chat-container {
+      position: relative;
+      padding: 1rem;
+    }
+
+    .chat-container li.chat-left,
+    .chat-container li.chat-right {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      margin-bottom: 40px;
+    }
+
+    .chat-text img {
+      width: 300px;
+      height: 200px;
+      justify-content: center;
+    }
+
+    .chat-avatar img {
+      width: 48px;
+      height: 48px;
+      -webkit-border-radius: 30px;
+      -moz-border-radius: 30px;
+      border-radius: 30px;
+    }
+
+
+
+    .chat-container li .chat-avatar {
+      margin-right: 20px;
+    }
+
+    .chat-container li.chat-right {
+      justify-content: flex-end;
+    }
+
+    .chat-container li.chat-right>.chat-avatar {
+      margin-left: 20px;
+      margin-right: 0;
+    }
+
+    .chat-container li .chat-name {
+      font-size: .75rem;
+      color: #999999;
+      text-align: center;
+    }
+
+    .chat-container li .chat-text {
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: 10px;
+      border-radius: 25px;
+      background-color: #82ccdd;
+      padding: 10px;
+      position: relative;
+      max-width: max-content;
+      text-align: center;
+    }
+
+
+
+    .chat-container li.chat-right>.chat-text {
+      text-align: center;
+    }
+
+    .chat-container li.chat-left>.chat-text {
+      background-color: #4B49AC;
+      color: white;
+    }
+
+
+    .chat-container li .chat-hour {
+      padding: 0;
+      margin-bottom: 10px;
+      font-size: .75rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 0 15px;
+    }
+
+    .chat-container li .chat-hour>span {
+      font-size: 16px;
+      color: #9ec94a;
+    }
+
+    .chat-container li.chat-right>.chat-hour {
+      margin: 0 15px 0 0;
+    }
+
+    @media (max-width: 767px) {
+
+      .chat-container li.chat-left,
+      .chat-container li.chat-right {
+        flex-direction: column;
+        margin-bottom: 30px;
+      }
+
+      .chat-avatar img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .chat-text img {
+        width: 150px;
+        height: 150px;
+        justify-content: center;
+      }
+
+      .chat-container li.chat-left .chat-avatar {
+        margin: 0 0 5px 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-container li.chat-left .chat-hour {
+        justify-content: flex-start;
+      }
+
+      .chat-container li.chat-left .chat-name {
+        margin-left: 5px;
+      }
+
+      .chat-container li.chat-right .chat-avatar {
+        order: -1;
+        margin: 0 0 5px 0;
+        align-items: center;
+        display: flex;
+        justify-content: right;
+        flex-direction: row-reverse;
+      }
+
+      .chat-container li.chat-right .chat-text {
+        margin-left: auto;
+        margin-right: 0;
+
+      }
+
+      .chat-container li.chat-right .chat-hour {
+        justify-content: flex-end;
+        order: 2;
+      }
+
+      .chat-container li.chat-right .chat-name {
+        margin-right: 5px;
+      }
+
+      .chat-container li .chat-text {
+        font-size: .8rem;
+        width: 200px;
+      }
+
+
+
+    }
+
+    .chat-form {
+      padding: 15px;
+      width: 100%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ffffff;
+      border-top: 1px solid white;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .card {
+      border: 0;
+      background: #f4f5fb;
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      box-shadow: none;
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check2" viewBox="0 0 16 16">
+      <path
+        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+    </symbol>
+    <symbol id="circle-half" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+    </symbol>
+    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+      <path
+        d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+      <path
+        d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+    </symbol>
+    <symbol id="sun-fill" viewBox="0 0 16 16">
+      <path
+        d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+    </symbol>
+  </svg>
+
+
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Makhazin</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search"
+      aria-label="Search">
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="nav-link px-3" href="{% url 'account:logout' %}">Sign out</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-body-tertiary sidebar collapse">
+        <div class="position-sticky pt-3 sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account:account' %}">
+                <span data-feather="file" class="align-text-bottom"></span>
+                Deshboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account:details' %}">
+                <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                Account Info
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'chat:message' %}">
+                <span data-feather="message" class="align-text-bottom"></span>
+                Chat
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="message" class="align-text-bottom"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="mt-5"></div>
+        <div class="mt-3"></div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+
+              {% if request.user.is_authenticated %}
+              <input type="hidden" id="logged-in-user" value="{{ user.id }}">
+              <input type="hidden" id="selfname" value="{{ user.username }}">
+              {% endif %}
+              <!-- Page header start -->
+
+              <!-- Page header end -->
+
+              <!-- Content wrapper start -->
+
+              <!-- Row start -->
+              <div class="row">
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                  <div class="card m-0">
+
+                    <!-- Row start -->
+                    <div class="row">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 mobile-chat-user shadow-lg"
+                        style="overflow-y:auto;height:100%;">
+
+                        <div class="users-container" style="height:600px;overflow: scroll;">
+
+
+                          <p>Recent chat</p>
+                          <ul class="users contacts">
+                            {% for thread in Threads %}
+                            <li class="person {% if forloop.first %}active{% endif %} contact-li shadow-sm"
+                              chat-id="chat_{{ thread.pk }}" style="cursor: pointer" data-chat="person5">
+                              <div class="user">
+                                {% if thread.first_person == request.user %}
+                                <img src="{{ thread.second_person.get_image.urls  }}" alt="not found"
+                                  onerror=this.src="{% static 'img/avatar.png' %}">
+                                {% else %}
+                                <img src="{{ thread.first_person.get_image.urls }}" alt="not found"
+                                  onerror=this.src="{% static 'img/avatar.png' %}">
+                                {% endif %}
+                                <span class="status away"></span>
+
+                              </div>
+                              <p class="name-time">
+                                {% if thread.first_person == request.user %}
+                                <span>{{ thread.second_person.first_name }}
+                                  <br>
+                                  {{ thread.second_person.username }}</span>
+                                {% else %}
+                                <span>{{ thread.first_person.first_name }}
+                                  <br>
+                                  {{ thread.first_person.username }}
+                                </span>
+                                {% endif %}
+
+                              </p>
+                            </li>
+
+                            {% endfor %}
+                          </ul>
+
+
+
+                        </div>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 mobile-chat"
+                        style="overflow-y:auto;height:100%;">
+                        <div class="card userthread">
+                          {% for thread in Threads %}
+                          <div class="messages-wrapper  {% if forloop.first %}hide is_active{% else %}hide{% endif %}"
+                            chat-id="chat_{{ thread.pk }}" other-user-id="
+                                        {% if thread.first_person == request.user %}
+                                            {{ thread.second_person.id }}
+                                        {% else %}
+                                            {{ thread.first_person.id }}
+                                        {% endif %}
+                                    ">
+                            <div class="selected-user">
+
+                              {% if thread.first_person == request.user %}
+                              <span><span id="back" class="fa fa-chevron-circle-left">Back</span>
+                                <strong>{{ thread.second_person.first_name }}</strong>
+                                ({{ thread.second_person.username }})
+                              </span>
+                              {% else %}
+                              <span><span id="back" class="fa fa-chevron-circle-left">Back</span>
+                                <strong>{{ thread.first_person.first_name }}</strong>
+                                ({{ thread.first_person.username }})</span>
+                              {% endif %}
+                              <p>{{ thread.message_thread.all.count }} messages</p>
+                            </div>
+                            <div class="chat-container" style="overflow:scroll;">
+                              <ul class="chat-box chatContainerScroll msg_card_body">
+                                {% for chat in thread.message_thread.all %}
+                                {% if chat.user == request.user %}
+                                <li class="chat-right" data-message-id="{{ chat.pk }}">
+                                  <div class="chat-hour">
+                                    {{ chat.created_at|date:"d M" }},{{ chat.created_at|time:"h:i:A" }} <span
+                                      class="fa fa-check-circle"></span></div>
+                                  <div class="chat-text">
+                                    {% autoescape off %}
+                                    {{ chat.message }}
+                                    {% endautoescape %}
+                                  </div>
+                                  <div class="chat-avatar">
+                                    <img src="{{ chat.user.get_image.urls }}" id="selfimg" alt="Not found"
+                                      onerror=this.src="{% static 'img/avatar.png' %}">
+                                    <div class="chat-name">{{ chat.user.username }}</div>
+                                  </div>
+                                </li>
+
+                                {% else %}
+                                <li class="chat-left" data-message-id="{{ chat.pk }}">
+                                  <div class="chat-avatar">
+                                    <img src="{{ chat.user.get_image.urls }}" alt="Not Found"
+                                      onerror=this.src="{% static 'img/avatar.png' %}">
+                                    <div class="chat-name">{{ chat.user.username }}</div>
+                                  </div>
+                                  <div class="chat-text">
+                                    {{ chat.message }}
+                                  </div>
+                                  <div class="chat-hour">
+                                    {{ chat.created_at|date:"d M" }},{{ chat.created_at|time:"h:i:A" }} <span
+                                      class="fa fa-check-circle"></span></div>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+
+                              </ul>
+
+                            </div>
+
+                          </div>
+
+                          {% endfor %}
+
+
+                        </div>
+                        <div class="card-footer1">
+                          <div class="form-group">
+                            <form id="send-message-form">
+                              <div class="input-group">
+
+                                <input type="text" class="content form-control" id="input-message" title="Message"
+                                  placeholder="Write your message" name="example" required />
+                                <div class="input-group-append">
+                                  <button class="btn btn-primary" type="submit">
+                                    Send <i class="fa fa-location-arrow"></i>
+                                  </button>
+
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Row end -->
+                  </div>
+
+                </div>
+
+              </div>
+              <!-- Row end -->
+
+
+              <!-- Content wrapper end -->
+
+
+
+            </div>
+            <div id="myModal" class="modal">
+              <span class="close">&times;</span>
+              <img class="modal-content" id="img01">
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+      </main>
+    </div>
+  </div>
+
+
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
+    integrity="sha384-gdQErvCNWvHQZj6XZM0dNsAoY4v+j5P1XDpNkcM3HJG1Yx04ecqIHk7+4VBOCHOG" crossorigin="anonymous">
+  </script>
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js">
+  </script>
+
+  <script>
+    // {#for show image in big#}
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    // {#var img = document.getElementById("myImg");#}
+    var modalImg = document.getElementById("img01");
+    $(document).on('click', '.chat-avatar img', function () {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+      console.log("hit")
+    })
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // {#end#}
+    //     {#for rich text#}
+
+    // {#end rich text#}
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      console.log("mobile")
+      $(document).on('click', '#back', function () {
+        $('.mobile-chat').removeClass('is_active')
+        $('.mobile-chat-user').removeClass('hide')
+
+      })
+      // {#    var x=$(window).width();#}
+      // {#var y=$(window).height();#}
+      // {#var a=x;#}
+      // {#var b=(y/2)+150;#}
+      // {##}
+      // {#$(".chat-container").css({height:b+'px'});#}
+      // {#$(".users-container").css({height:b+'px'});#}
+    } else {
+      //...
+    }
+    $(document).on('click', '.contact-li', function () {
+
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        console.log("mobile")
+        $('.active.contact-li').removeClass('active')
+        $(this).addClass('active')
+
+        // message wrappers
+        $('.mobile-chat-user').addClass('hide')
+        let chat_id = $(this).attr('chat-id')
+        $('.messages-wrapper.is_active').removeClass('is_active')
+
+        $('.messages-wrapper[chat-id="' + chat_id + '"]').addClass('is_active')
+        $('.mobile-chat').addClass('is_active')
+        $('.messages-wrapper[chat-id="' + chat_id + '"] .chat-container').animate({
+          scrollTop: $('.messages-wrapper[chat-id="' + chat_id + '"] .chat-container').prop("scrollHeight")
+        }, 500);
+
+      } else {
+        $('.active.contact-li').removeClass('active')
+        $(this).addClass('active')
+
+        // message wrappers
+        let chat_id = $(this).attr('chat-id')
+        $('.messages-wrapper.is_active').removeClass('is_active')
+        $('.messages-wrapper[chat-id="' + chat_id + '"]').addClass('is_active')
+        $('.messages-wrapper[chat-id="' + chat_id + '"] .chat-container').animate({
+          scrollTop: $('.messages-wrapper[chat-id="' + chat_id + '"] .chat-container').prop("scrollHeight")
+        }, 500);
+
+      }
+
+    })
+  </script>
+  <script type="text/javascript" src="{% static 'js/chat.js' %}"></script>
+
+
+</body>
+
+</html>

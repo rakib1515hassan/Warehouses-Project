@@ -1,0 +1,278 @@
+{% extends 'dashboard/dsbase.html' %}
+
+	{% block main %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .brating {
+        border: none;
+        float: left;
+        margin-left: -150px;
+    }
+
+    .myratings {
+        font-size: 50px;
+        color: green
+    }
+
+    .brating>[id^="star"] {
+        display: none
+    }
+
+    .brating>label:before {
+        margin: 5px;
+        font-size: 2.0em;
+        font-family: FontAwesome,sans-serif;
+        display: inline-block;
+        content: "\f005"
+    }
+
+    .brating>.half:before {
+        content: "\f089";
+        position: absolute
+    }
+
+    .brating>label {
+        color: #ddd;
+        float: right
+    }
+
+    .brating>[id^="star"]:checked~label,
+    .brating:not(:checked)>label:hover,
+    .brating:not(:checked)>label:hover~label {
+        color: #FFD700
+    }
+
+    .brating>[id^="star"]:checked+label:hover,
+    .brating>[id^="star"]:checked~label:hover,
+    .brating>label:hover~[id^="star"]:checked~label,
+    .brating>[id^="star"]:checked~label:hover~label {
+        color: #FFED85
+    }
+
+    .reset-option {
+        display: none
+    }
+</style>
+	{% load static %}
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+
+			<!--begin::Toolbar-->
+
+			<!--end::Toolbar-->
+
+			<!--begin::Content-->
+
+			<!--end::Content-->
+
+			<div class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1
+							class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+							Space request</h1>
+                        	<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+						<!--begin::Item-->
+						<li class="breadcrumb-item text-muted">
+							<a href="/account" class="text-muted text-hover-primary">Dashboard</a>
+						</li>
+						<!--end::Item-->
+						<!--begin::Item-->
+						<li class="breadcrumb-item">
+							<span class="bullet bg-gray-400 w-5px h-2px"></span>
+						</li>
+						<!--end::Item-->
+						<!--begin::Item-->
+						<li class="breadcrumb-item text-muted">Space Request</li>
+						<!--end::Item-->
+					</ul>
+					<!--end::Breadcrumb-->
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--begin::Content container-->
+			<div id="kt_app_content_container" class="app-container container-xxl mb-20">
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header border-0 pt-6">
+						<!--begin::Card title-->
+						<div class="card-title">
+							<!--begin::Search-->
+							<div class="d-flex align-items-center position-relative my-1">
+								<i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+									<span class="path1"></span>
+									<span class="path2"></span>
+								</i>
+								<input type="text" data-kt-user-table-filter="search"
+									class="form-control form-control-solid w-250px ps-13"
+									placeholder="Search user" />
+							</div>
+							<!--end::Search-->
+						</div>
+				
+					</div>
+					<!--end::Card header-->
+					<!--begin::Card body-->
+					<div class="card-body py-4">
+						<!--begin::Table-->
+						<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+							<thead>
+								<tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+									<th class="w-10px pe-2">
+										<div
+											class="form-check form-check-sm form-check-custom form-check-solid me-3">
+											<input class="form-check-input" type="checkbox"
+												data-kt-check="true"
+												data-kt-check-target="#kt_table_users .form-check-input"
+												value="1" />
+										</div>
+									</th>
+									<th class="min-w-125px">Sl</th>
+									<th class="min-w-125px">Name</th>
+									<th class="min-w-125px">WareHouse</th>
+									<th class="min-w-125px">Status</th>
+									<th class="min-w-125px">Action</th>
+									<th class="text-end min-w-100px">Invoice</th>
+								</tr>
+							</thead>
+							<tbody class="text-gray-600 fw-semibold">
+								{% for booking in space_request %}
+								<tr>
+									<td>
+										<div
+											class="form-check form-check-sm form-check-custom form-check-solid">
+											<input class="form-check-input" type="checkbox" value="1" />
+										</div>
+									</td>
+									<td>{{ forloop.counter }}</td>
+									<td class="d-flex align-items-center">
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<a href="../../demo1/dist/apps/user-management/users/view.html"
+												class="text-gray-800 text-hover-primary mb-1">{{booking.business.username}}</a>
+										</div>
+										<!--begin::User details-->
+									</td>
+									<td>
+										<div class="badge badge-light fw-bold">{{booking.warehouse.name}}</div>
+									</td>
+									<td id="bookingStatusTable{{booking.id}}">
+										{%if booking.status == 'APPROVED'  %}
+										<p class="text-success">Approved </p>
+										{% elif booking.status == 'DECLINE'  %}
+										<p class="text-danger">Decline </p>
+										{%else%}
+										<p class="text-info">Pending</p>
+										{%endif%}
+									</td>
+									<td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingDetails{{booking.id}}">
+  Details
+</button>
+                                    </td>
+									<td class="text-end">
+										<a class="btn btn-success" href="{% url 'core:download-invoice' booking.get_invoice.id 'view' %}">View</a>
+									</td>
+								</tr>
+							{%endfor%}
+
+							</tbody>
+						</table>
+						<!--end::Table-->
+						{% for booking in space_request %}
+      <div class="modal fade" id="bookingDetails{{booking.id}}" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="bookingModalLabel">Booking Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <p>Warehouse: {{booking.warehouse.name}}</p>
+          <p>Business Name: {{booking.business.username}}</p>
+          <p>Product: {{booking.product.name}}</p>
+          <p>Quantity: {{booking.quantity}}</p>
+          <p>Area: {{booking.area}}</p>
+          <p>Start date: {{booking.start_date}}</p>
+          <p>Duration_Storage: {{booking.Duration_Storage}}</p>
+          <p>Booking Time: {{booking.created_at}}</p>
+          <p>Status: {%if booking.status == 'APPROVED'  %}
+										<p class="text-success">Approved </p>
+										{% elif booking.status == 'DECLINE'  %}
+										<p class="text-danger">Decline </p>
+										{%else%}
+										<p class="text-info">Pending</p>
+										{%endif%}
+            </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      {%endfor%}
+
+
+					</div>
+					<!--end::Card body-->
+				</div>
+				<!--end::Card-->
+			</div>
+
+
+		</div>
+
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div
+				class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2023&copy;</span>
+					<a href="https://quickit24.com/" target="_blank"
+						class="text-gray-800 text-hover-primary">Quickit24</a>
+				</div>
+				<!--end::Copyright-->
+				<!--begin::Menu-->
+				<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+					<li class="menu-item">
+						<a href="https://quickit24.com/about.html" target="_blank"
+							class="menu-link px-2">About</a>
+					</li>
+					<li class="menu-item">
+						<a href="https://quickit24.com/contact.html" target="_blank"
+							class="menu-link px-2">Support</a>
+					</li>
+				</ul>
+				<!--end::Menu-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('[data-kt-user-table-filter="search"]').on('input', function() {
+				var searchText = $(this).val().toLowerCase();
+				$('#kt_table_users tbody tr').filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1);
+				});
+			});
+		});
+		</script>
+		
+
+	{% endblock main %}

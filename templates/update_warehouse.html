@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+
+
+{% block main %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <div class="container-xxl py-5 register">
+      <div class="container">
+          <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+              <h6 class="section-title bg-white text-center text-primary px-3"></h6>
+              <h1 class="mb-5 mt-5">Update Warehouse</h1>
+          </div>
+          <div class="row">
+              <div class="col-lg-6 offset-lg-3">
+                   <form name="WarehouseForm" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="row">
+                          <div class="col-12 mb-4">
+                           <label for="location" class="form-label">Warehouse Location</label>
+                              {% with location=form.instance.location %}
+                            <input class="form-control" type="text" id="location" name="location" placeholder="Enter a location..." value="{{ location }}">
+                            {% endwith %}
+                              <datalist id="location-suggestions"></datalist>
+                          </div>
+                          {% for field in form %}
+                          {%if field.name != "location_coordinates" %}
+                                 <div class="col-12 mb-4">
+                              <label for="{{ field.id_for_label }}" class="form-label">{{field.label_tag}}</label>
+                                    {{ field }}
+                                     {%endif%}
+                          </div>
+                          {%endfor%}
+                          <input type="hidden" name="location_coordinates" id="location-coordinates">
+                           {% if photos %}
+                           <div class="col-12 mb-4">
+                               <h3>Existing photos:</h3>
+                          <div class="photos">
+                            {% for photo in photos %}
+                            <div class="checkbox-search">
+                              <img src="{{ photo.photo.url }}" style="width: 200px; height: 200px" alt="{{ photo.warehouse.name }}">
+                                <p>Delete</p>
+                              <input type="checkbox"  name="delete_photos" value="{{ photo.id }}">
+                                <br>
+                            </div>
+                            {% endfor %}
+                          </div>
+                           </div>
+                          {% endif %}
+                          <div class="col-12 mb-4 mt-3">
+                              <button class="btn btn-primary w-100 py-3" type="submit">Update</button>
+                          </div>
+
+                      </div>
+                  </form>
+
+              </div>
+          </div>
+      </div>
+  </div>
+{% block script %}
+<script>
+    $("#location").autocomplete({
+    source: function(request, response) {
+      $.ajax({
+        url: "https://api.mapbox.com/geocoding/v5/mapbox.places/" + request.term + ".json",
+        method: "GET",
+        data: {
+          access_token: "pk.eyJ1IjoiYWxpbmFjaXJpIiwiYSI6ImNsaWF4YjZqMzA4Y3ozc3FwanJ1Znkyd2IifQ.bG2Qbj0uqd8ZdqwFul9a-w"
+        },
+        success: function(data) {
+          response(data.features.map(function(feature) {
+            return {
+              label: feature.place_name,
+              value: feature.place_name,
+              latitude: feature.geometry.coordinates[1],
+              longitude: feature.geometry.coordinates[0]
+            };
+          }));
+        }
+      });
+    },
+    select: function(event, ui) {
+      $("#location-coordinates").val(ui.item.latitude + "," + ui.item.longitude);
+    }
+  });
+    </script>
+
+  {% endblock script %}
+
+  {% endblock main %}
+

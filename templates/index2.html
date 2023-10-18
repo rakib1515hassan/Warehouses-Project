@@ -1,0 +1,233 @@
+{% include 'inc/_header.html' %}
+
+<div class="container-fluid bg-primary py-5 mb-5 hero-header">
+    <div class="container py-5">
+        <div class="row justify-content-center py-5">
+            <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Rentabilisez vos espaces de stockage disponibles.</h1>
+
+                <!-- Button trigger modal -->
+            {% if request.user.is_authenticated %}
+                <a {% if request.user.account_type == "BUSINESS" %}data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+           {% elif not request.user.is_email_verified%}
+           href="{% url 'account:not_verified' %}"
+           {%else%}
+            href=""
+           {%endif%} class="btn btn-primary rounded-pill" >Proposer un espace</a>
+                {% else %}
+                 <a href="/account/login/?next=/2/" class="btn btn-primary rounded-pill" >Proposer un espace</a>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% if request.user.is_authenticated and request.user.account_type == "BUSINESS" %}
+<!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="staticBackdropLabel">Je propose</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- multistep form -->
+                        <form id="msform" class="text-dark" method="POST" action="{% url 'core:account_request' %}">
+                            {% csrf_token %}
+                                <div class="text-start ps-3 py-2"><b>Company name </b></div>
+                                <input name="company_name" class="rounded-20 py-2 fs-6" type="text" placeholder="Company name"
+                                    required />
+                                <button class="submit action-button">Submit</button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+{% endif %}
+<!-- Navbar & Hero End -->
+
+
+<!-- About Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                <div class="position-relative h-100">
+                    <img class="img-fluid position-absolute w-100 h-100" src="img/about.jpg" alt=""
+                        style="object-fit: cover;">
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
+                <h1 class="mb-4">Welcome to <span class="text-primary">Makhazin</span></h1>
+                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
+                    eos. Clita erat ipsum et lorem et sit.</p>
+                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et
+                    eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
+                </p>
+                <div class="row gy-2 gx-4 mb-4">
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Unbeatable affordable
+                            pricing</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Ultra-secure storage</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>A reliable technology
+                            partner</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Effortlessly easy-to-use
+                            platform</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Flexible lease terms
+                            tailored to your needs</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>24/7 support for your
+                            ultimate convenience</p>
+                    </div>
+                </div>
+                <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+
+<!-- Service Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Features</h6>
+            <h1 class="mb-5">Our Features</h1>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-globe text-primary mb-4"></i>
+                        <h5>All over Canada</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-hotel text-primary mb-4"></i>
+                        <h5>Warehouse Rent</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-user text-primary mb-4"></i>
+                        <h5>Employees</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-cog text-primary mb-4"></i>
+                        <h5>Event Management</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-globe text-primary mb-4"></i>
+                        <h5>All over Canada</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-hotel text-primary mb-4"></i>
+                        <h5>Warehouse Rent</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-user text-primary mb-4"></i>
+                        <h5>Employees</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-cog text-primary mb-4"></i>
+                        <h5>Event Management</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Service End -->
+
+
+<!-- Package Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Properties</h6>
+            <h1 class="mb-5">Awesome Properties</h1>
+        </div>
+        <div class="row g-4 justify-content-center">
+            {% for warehouse in warehouses %}
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="package-item">
+                    <div class="overflow-hidden">
+                        <img class="img-fluid" src="{{warehouse.get_photo.photo.url}}" alt="">
+                    </div>
+                    <div class="d-flex border-bottom">
+                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{warehouse.location}}</small>
+                        <small class="flex-fill text-center py-2"><i class="fa fa-chart-area text-primary me-2"></i>{{warehouse.size}}</small>
+                    </div>
+                    <div class="text-center p-4">
+                        <h3 class="mb-0">${{warehouse.price}}</h3>
+                        <div class="mb-3">
+                            <i class="fa fa-star{% if warehouse.averageReview < 0.5 %}-o{% elif warehouse.averageReview >= 0.5 and warehouse.averageReview < 1 %}-half {% endif %} text-primary"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 1.5 %}-o{% elif warehouse.averageReview >= 1.5 and warehouse.averageReview < 2 %}-half {% endif %} text-primary"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 2.5 %}-o{% elif warehouse.averageReview >= 2.5 and warehouse.averageReview < 3 %}-half {% endif %} text-primary"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 3.5 %}-o{% elif warehouse.averageReview >= 3.5 and warehouse.averageReview < 4 %}-half {% endif %} text-primary"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 4.5 %}-o{% elif warehouse.averageReview >= 4.5 and warehouse.averageReview < 5 %}-half {% endif %} text-primary"
+                        aria-hidden="true"></i>
+                        </div>
+                        <p>{{warehouse.name|slice:":40"}}...</p>
+                        <div class="d-flex justify-content-center mb-2">
+                            <a href="{% url 'core:warehouse_details' warehouse.pk %}" class="btn btn-sm btn-primary px-3 border-end"
+                                style="border-radius: 30px 0 0 30px;">Read More</a>
+                            <a href="{% url 'core:warehouse_details' warehouse.pk %}" class="btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Rent
+                                Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+            
+        </div>
+    </div>
+</div>
+<!-- Package End -->
+
+
+{% include 'inc/_footer.html' %}

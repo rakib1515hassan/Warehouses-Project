@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvipoA5dBlxWXuXctizbINF1YYuWUzvBQ"></script>
+    <style>
+         #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+</head>
+<body>
+    
+    {% for i in warehouses %}
+       <div style="width: 500px; margin: auto;">
+            <li> Owner -> {{ i.owner }} </li>
+            <li> Location -> {{ i.location }} </li>
+            <li> Total Area -> {{ i.size }} m<sup>2</sup> </li>
+            <li> Price -> {{ i.price }} /m</li>
+            <li> <a href="{% url 'core:create_booking' i.pk %}"> Booking </a> </li>
+       </div>
+       <hr>
+    {% endfor %}
+
+ <h1>Warehouses Map</h1>
+    <div id="map"></div>
+
+
+
+<script>
+   function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: { lat: 31.7917, lng: -7.0926 }
+        });
+        {% for warehouse in warehouses %}
+            var locationString = "{{ warehouse.coordinates }}";
+            var locationArray = locationString.split(",");
+            var latitude = parseFloat(locationArray[0]);
+            var longitude = parseFloat(locationArray[1]);
+        var location = { lat: latitude, lng: longitude };
+        var marker = new google.maps.Marker({
+          position: location,
+          map: map,
+          title: '{{ warehouse.name }}'
+        });
+        marker.addListener('click', function() {
+          var infowindow = new google.maps.InfoWindow({
+            content: '<h3>{{ warehouse.owner }}</h3><p>{{ warehouse.name }}</p><p>{{ warehouse.size }}</p>' +
+                '<a href="{{warehouse.pk}}">Details</a>'
+          });
+          infowindow.open(map, marker);
+        });
+        {% endfor %}
+      }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvipoA5dBlxWXuXctizbINF1YYuWUzvBQ&callback=initMap"></script>
+    
+</body>
+</html>

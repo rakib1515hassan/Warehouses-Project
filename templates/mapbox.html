@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Set a point after Geocoder result</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+
+<style>
+    #geocoder-container > div {
+        min-width: 50%;
+        margin-left: 25%;
+    }
+</style>
+<div id="map"></div>
+<br>
+ <div id="geocoder" class="geocoder-container"></div>
+<input type="hidden" id="coordinates" name="coordinates" />
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpbmFjaXJpIiwiYSI6ImNsaWF4YjZqMzA4Y3ozc3FwanJ1Znkyd2IifQ.bG2Qbj0uqd8ZdqwFul9a-w';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [-79.4512, 43.6568],
+        zoom: 13
+    });
+
+    var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        marker: {
+            color: 'orange'
+        },
+        mapboxgl: mapboxgl
+    });
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+    geocoder.on('result', function(e) {
+      var coordinates = e.result.center;
+      console.log(coordinates)
+         document.getElementById('coordinates').value = coordinates.join(',');
+    });
+    var marker = new mapboxgl.Marker({
+      draggable: false
+    });
+
+    map.on('click', function(e) {
+      var coordinates = e.lngLat;
+      marker.setLngLat(coordinates).addTo(map);
+      console.log(coordinates)
+      document.getElementById('coordinates').value = coordinates.lng + ',' + coordinates.lat;
+    });
+    marker.getElement().addEventListener('click', function() {
+      alert('Marker clicked!');
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% load static %}
+{% include 'inc/profile/_header.html' %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="mt-5"></div>
+
+    <div class="mt-3"></div>
+
+      <h4 class="mt-2">Export</h4>
+         <form class="search-section" method="POST" action="{% url 'account:export_bookings_csv' %}">
+                                {% csrf_token %}
+                                    <div class="select-search">
+                                        <h5>Select Option</h5>
+                                        <select class="form-control" name="model">
+                                            <option value="" selected>Select</option>
+                                            <option value="User">User</option>
+                                           <option value="Booking">Booking</option>
+                                            <option value="Warehouse">Warehouse</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div class="search-botton">
+                                        <input type="submit" class="btn btn-primary rounded-pill py-2 px-4 me-2" value="Submit">
+                                    </div>
+                            </form>
+
+
+    </main>
+  </div>
+</div>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js" integrity="sha384-gdQErvCNWvHQZj6XZM0dNsAoY4v+j5P1XDpNkcM3HJG1Yx04ecqIHk7+4VBOCHOG" crossorigin="anonymous"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+
+
+  </body>
+</html>

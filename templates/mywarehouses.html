@@ -1,0 +1,17 @@
+{%for warehouse in mywarehouses %}
+<p>{{warehouse.id}}</p>
+<p>{{warehouse.location}}</p>
+{%for photo in warehouse.get_photos %}
+<img src="{{photo.photo.url}}">
+{%endfor%}
+<p>${{warehouse.price}}</p>
+<p>{{warehouse.owner.username}}</p>
+<a href="{% url 'core:warehouse_details' warehouse.pk %}">Details</a>
+ <a href="{% url 'core:warehouse_update' warehouse.pk %}">Edit</a>
+            <form action="{% url 'core:warehouse_delete' warehouse.pk %}" method="post" style="display: inline-block;">
+              {% csrf_token %}
+              <button type="submit">Delete</button>
+            </form>
+<hr>
+
+{%endfor%}

@@ -1,0 +1,65 @@
+{% load static %}
+{% include 'inc/_header.html' %}
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+{% comment %} {% load widget_tweaks %} {% endcomment %}
+<!-- Register start -->
+<div class="container-xxl py-5 register">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Create an account</h6>
+            <h1 class="mb-5">Complete Your Account</h1>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+
+                {% for message in messages%}
+                <div class="alert alert-danger" role="alert">
+                    {{message}}
+                </div>
+                {% endfor %}
+                <form name="signup-form" method="POST" id="signup-form" action="{% url 'account:complete_profile' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <div class="form-floating">
+                                   <select class="form-select" id="account_type" onchange="toggleCompanyNameField()" name="account_type" aria-label="Floating label select example">
+    <option value="BUSINESS" selected>Business</option>
+    <option value="WAREHOUSE_OWNER">Warehouse Owner</option>
+  </select>
+  <label for="account_type">Account Type</label>
+                            </div>
+                        </div>
+                         <div class="col-12 mb-4" id="company" style="display: none">
+                            <div class="form-floating">
+                                     <input type="text" name="company_name" class="form-control" id="company_name"
+                                            value="" placeholder="Company Name ">
+                                <label for="company_name">Company Name</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-primary w-100 py-3" type="submit">Submit</button>
+                    </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</div>
+<script>
+     function toggleCompanyNameField() {
+    var accountTypeField = document.getElementById('account_type');
+    var companyNameField = document.getElementById('company');
+
+    if (accountTypeField.value === 'BUSINESS') {
+        companyNameField.style.display="none";
+    } else {
+        companyNameField.style.display="block";
+    }
+}
+
+</script>
+<!-- Register end -->
+
+{% include 'inc/_footer.html' %}

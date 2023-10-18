@@ -1,0 +1,314 @@
+{% extends 'dashboard/dsbase.html' %}
+{% block dashboard_active %}active{% endblock dashboard_active %}
+
+	{% block main %}
+	{% load static %}
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+			
+			<!--begin::Toolbar-->
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">		
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1
+							class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+							Overview</h1>
+					</div>
+					<!--end::Page title-->
+					{% if request.user.account_type == "WAREHOUSE_OWNER" or request.user.account_type == "ADMIN" %}
+					<!--begin::Actions-->
+					<div class="d-flex align-items-center gap-2 gap-lg-3">
+
+						<!--begin::Primary button-->
+						<a href="{% url 'core:warehouse_create' %}" class="btn btn-sm fw-bold btn-primary">Create</a>
+						<!--end::Primary button-->
+					</div>
+					<!--end::Actions-->
+					{% endif %}
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--end::Toolbar-->
+
+			<!--begin::Content-->
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<!--begin::Content container-->
+				<div id="kt_app_content_container" class="app-container container-fluid">
+					<!--begin::Row-->
+					<div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+						<!--begin::Col-->
+						<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+							<!--begin::Card widget 20-->
+							<div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-100 mb-5 mb-xl-10"
+								style="background-color: #F1416C;background-image:url('{% static 'assets/media/patterns/vector-1.png' %}');">
+								<!--begin::Header-->
+								<div class="card-header pt-5">
+									<!--begin::Title-->
+									<div class="card-title d-flex flex-column">
+										<!--begin::Amount-->
+										<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{warehouses|length}}</span>
+										<!--end::Amount-->
+										<!--begin::Subtitle-->
+										<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Active
+											Warehouse</span>
+										<!--end::Subtitle-->
+									</div>
+									<!--end::Title-->
+								</div>
+								<!--end::Header-->
+								<!--begin::Card body-->
+								<div class="card-body d-flex align-items-end pt-0">
+									<!--begin::Progress-->
+									<div class="d-flex align-items-center flex-column mt-3 w-100">
+										<div
+											class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+											<span>43 Pending</span>
+											<span>72%</span>
+										</div>
+										<div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+											<div class="bg-white rounded h-8px" role="progressbar"
+												style="width: 72%;" aria-valuenow="50" aria-valuemin="0"
+												aria-valuemax="100"></div>
+										</div>
+									</div>
+									<!--end::Progress-->
+								</div>
+								<!--end::Card body-->
+							</div>
+							<!--end::Card widget 20-->
+						</div>
+						<!--end::Col-->
+						<!--begin::Col-->
+						<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+							<!--begin::Card widget 17-->
+							<div class="card card-flush h-md-100 mb-5 mb-xl-10">
+								<!--begin::Header-->
+								<div class="card-header pt-5">
+									<!--begin::Title-->
+									<div class="card-title d-flex flex-column">
+										<!--begin::Info-->
+										<div class="d-flex align-items-center">
+											<!--begin::Currency-->
+											<span
+												class="fs-4 fw-semibold text-gray-400 me-1 align-self-start">$</span>
+											<!--end::Currency-->
+											<!--begin::Amount-->
+											<span
+												class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">69,700</span>
+											<!--end::Amount-->
+										</div>
+										<!--end::Info-->
+										<!--begin::Subtitle-->
+										<span class="text-gray-400 pt-1 fw-semibold fs-6">Projects Earnings
+											in April</span>
+										<!--end::Subtitle-->
+									</div>
+									<!--end::Title-->
+								</div>
+								<!--end::Header-->
+								<!--begin::Card body-->
+								<div class="card-body pt-2 pb-4 d-flex flex-wrap align-items-center">
+									<!--begin::Labels-->
+									<div class="d-flex flex-column content-justify-center flex-row-fluid">
+										<!--begin::Label-->
+										<div class="d-flex fw-semibold align-items-center">
+											<!--begin::Bullet-->
+											<div class="bullet w-8px h-3px rounded-2 bg-success me-3"></div>
+											<!--end::Bullet-->
+											<!--begin::Label-->
+											<div class="text-gray-500 flex-grow-1 me-4">Leaf CRM</div>
+											<!--end::Label-->
+											<!--begin::Stats-->
+											<div class="fw-bolder text-gray-700 text-xxl-end">$7,660</div>
+											<!--end::Stats-->
+										</div>
+										<!--end::Label-->
+										<!--begin::Label-->
+										<div class="d-flex fw-semibold align-items-center my-3">
+											<!--begin::Bullet-->
+											<div class="bullet w-8px h-3px rounded-2 bg-primary me-3"></div>
+											<!--end::Bullet-->
+											<!--begin::Label-->
+											<div class="text-gray-500 flex-grow-1 me-4">Mivy App</div>
+											<!--end::Label-->
+											<!--begin::Stats-->
+											<div class="fw-bolder text-gray-700 text-xxl-end">$2,820</div>
+											<!--end::Stats-->
+										</div>
+										<!--end::Label-->
+									</div>
+									<!--end::Labels-->
+								</div>
+								<!--end::Card body-->
+							</div>
+							<!--end::Card widget 17-->
+
+						</div>
+						<!--end::Col-->
+
+					</div>
+					<!--end::Row-->
+
+				</div>
+				<!--end::Content container-->
+			</div>
+			<!--end::Content-->
+
+			<div class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1
+							class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+							Warehouse</h1>
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--begin::Content container-->
+			<div id="kt_app_content_container" class="app-container container-xxl mb-20">
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header border-0 pt-6">
+						<!--begin::Card title-->
+						<div class="card-title">
+							<!--begin::Search-->
+							<div class="d-flex align-items-center position-relative my-1">
+								<i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+									<span class="path1"></span>
+									<span class="path2"></span>
+								</i>
+								<input type="text" data-kt-user-table-filter="search"
+									class="form-control form-control-solid w-250px ps-13"
+									placeholder="Search user" />
+							</div>
+							<!--end::Search-->
+						</div>
+						<!--begin::Card title-->
+					<!--begin::Card toolbar-->
+						<div class="card-toolbar">
+							<!--begin::Toolbar-->
+							<div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+
+							</div>
+							<!--end::Toolbar-->
+							<!--begin::Group actions-->
+							<div class="d-flex justify-content-center align-items-center d-none"
+								data-kt-user-table-toolbar="selected">
+								<div class="fw-bold me-5">
+									<span class="me-2"
+										data-kt-user-table-select="selected_count"></span>Selected</div>
+								<button type="button" class="btn btn-danger"
+									data-kt-user-table-select="delete_selected">Delete Selected</button>
+							</div>
+							<!--end::Group actions-->
+							<!--begin::Modal - Adjust Balance-->
+
+							<!--end::Modal - New Card-->
+
+						</div>
+					</div>
+					<!--end::Card header-->
+					<!--begin::Card body-->
+					<div class="card-body py-4">
+						<!--begin::Table-->
+						<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+							<thead>
+								<tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+									<th class="w-10px pe-2">
+										<div
+											class="form-check form-check-sm form-check-custom form-check-solid me-3">
+											<input class="form-check-input" type="checkbox"
+												data-kt-check="true"
+												data-kt-check-target="#kt_table_users .form-check-input"
+												value="1" />
+										</div>
+									</th>
+									<th class="min-w-125px">Sl</th>
+									<th class="min-w-125px">Name</th>
+									<th class="min-w-125px">Available Size</th>
+									<th class="min-w-125px">Total Booked</th>
+									<th class="min-w-125px">Edit</th>
+									<th class="text-end min-w-100px"></th>
+								</tr>
+							</thead>
+							<tbody class="text-gray-600 fw-semibold">
+								{% csrf_token %}
+								{% for warehouse in warehouses %}
+								<tr>
+									<td>
+										<div
+											class="form-check form-check-sm form-check-custom form-check-solid">
+											<input class="form-check-input" type="checkbox" name="{{warehouse.id}}" value="{{warehouse.id}}" />
+										</div>
+									</td>
+									<td>{{ forloop.counter }}</td>
+									<td class="d-flex align-items-center">
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<p
+												class="text-gray-800 text-hover-primary mb-1">{{warehouse.name|slice:":20"}}...</p>
+										</div>
+										<!--begin::User details-->
+									</td>
+									<td>
+										<div class="badge badge-light fw-bold">{{ warehouse.size }}</div>
+									</td>
+									<td>{{ warehouse.booked|length }}</td>
+									<td><a class="btn btn-warning btn-sm" href="{% url 'core:warehouse_update' warehouse.pk %}">Update</a></td>
+									<td class="text-end">
+									</td>
+								</tr>
+							{%endfor%}
+							</tbody>
+						</table>
+						<!--end::Table-->
+					</div>
+					<!--end::Card body-->
+				</div>
+				<!--end::Card-->
+			</div>
+
+
+		</div>
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div
+				class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2023&copy;</span>
+					<a href="https://quickit24.com/" target="_blank"
+						class="text-gray-800 text-hover-primary">Quickit24</a>
+				</div>
+				<!--end::Copyright-->
+				<!--begin::Menu-->
+				<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+					<li class="menu-item">
+						<a href="https://quickit24.com/about.html" target="_blank"
+							class="menu-link px-2">About</a>
+					</li>
+					<li class="menu-item">
+						<a href="https://quickit24.com/contact.html" target="_blank"
+							class="menu-link px-2">Support</a>
+					</li>
+				</ul>
+				<!--end::Menu-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+	</div>
+
+
+	{% endblock main %}

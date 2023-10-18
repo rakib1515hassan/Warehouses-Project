@@ -1,0 +1,501 @@
+{% extends 'dashboard/dsbase.html' %}
+
+	{% block main %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .brating {
+        border: none;
+        float: left;
+        margin-left: -150px;
+    }
+
+    .myratings {
+        font-size: 50px;
+        color: green
+    }
+
+    .brating>[id^="star"] {
+        display: none
+    }
+
+    .brating>label:before {
+        margin: 5px;
+        font-size: 2.0em;
+        font-family: FontAwesome,sans-serif;
+        display: inline-block;
+        content: "\f005"
+    }
+
+    .brating>.half:before {
+        content: "\f089";
+        position: absolute
+    }
+
+    .brating>label {
+        color: #ddd;
+        float: right
+    }
+
+    .brating>[id^="star"]:checked~label,
+    .brating:not(:checked)>label:hover,
+    .brating:not(:checked)>label:hover~label {
+        color: #FFD700
+    }
+
+    .brating>[id^="star"]:checked+label:hover,
+    .brating>[id^="star"]:checked~label:hover,
+    .brating>label:hover~[id^="star"]:checked~label,
+    .brating>[id^="star"]:checked~label:hover~label {
+        color: #FFED85
+    }
+
+    .reset-option {
+        display: none
+    }
+</style>
+	{% load static %}
+	<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+		<!--begin::Content wrapper-->
+		<div class="d-flex flex-column flex-column-fluid">
+			
+			<!--begin::Toolbar-->
+			<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">		
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1
+							class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+							Overview</h1>
+					</div>
+					<!--end::Page title-->
+
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--end::Toolbar-->
+
+			<!--begin::Content-->
+			<div id="kt_app_content" class="app-content flex-column-fluid">
+				<!--begin::Content container-->
+				<div id="kt_app_content_container" class="app-container container-fluid">
+					<!--begin::Row-->
+					<div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+						<!--begin::Col-->
+						<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+							<!--begin::Card widget 20-->
+							<div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-100 mb-5 mb-xl-10"
+								style="background-color: #8441f1;background-image:url('{% static 'assets/media/patterns/vector-1.png' %}');">
+								<!--begin::Header-->
+								<div class="card-header pt-5">
+									<!--begin::Title-->
+									<div class="card-title d-flex flex-column">
+										<!--begin::Amount-->
+										<span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{bookings|length}}</span>
+										<!--end::Amount-->
+										<!--begin::Subtitle-->
+										<span class="text-white opacity-75 pt-1 fw-semibold fs-6">Approved Booking</span>
+										<!--end::Subtitle-->
+									</div>
+									<!--end::Title-->
+								</div>
+								<!--end::Header-->
+								<!--begin::Card body-->
+								<div class="card-body d-flex align-items-end pt-0">
+									<!--begin::Progress-->
+									<div class="d-flex align-items-center flex-column mt-3 w-100">
+										<div
+											class="d-flex justify-content-between fw-bold fs-6 text-white opacity-75 w-100 mt-auto mb-2">
+											<span>{{pending_bookings}} Pending</span>
+											<span>{{pending_ratio}}%</span>
+										</div>
+										<div class="h-8px mx-3 w-100 bg-white bg-opacity-50 rounded">
+											<div class="bg-white rounded h-8px" role="progressbar"
+												style="width: {{pending_ratio}}%;" aria-valuenow="50" aria-valuemin="0"
+												aria-valuemax="100"></div>
+										</div>
+									</div>
+									<!--end::Progress-->
+								</div>
+								<!--end::Card body-->
+							</div>
+							<!--end::Card widget 20-->
+						</div>
+						<!--end::Col-->
+						<!--begin::Col-->
+						<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
+							<!--begin::Card widget 17-->
+							<div class="card card-flush h-md-100 mb-5 mb-xl-10">
+								<!--begin::Header-->
+								<div class="card-header pt-5">
+									<!--begin::Title-->
+									<div class="card-title d-flex flex-column">
+										<!--begin::Info-->
+										<div class="d-flex align-items-center">
+											<!--begin::Currency-->
+											<span
+												class="fs-4 fw-semibold text-gray-400 me-1 align-self-start">$</span>
+											<!--end::Currency-->
+											<!--begin::Amount-->
+											<span
+												class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{earning}}</span>
+											<!--end::Amount-->
+										</div>
+										<!--end::Info-->
+										<!--begin::Subtitle-->
+										<span class="text-gray-400 pt-1 fw-semibold fs-6">Booking Earnings</span>
+										<!--end::Subtitle-->
+									</div>
+									<!--end::Title-->
+								</div>
+								<!--end::Header-->
+								<!--begin::Card body-->
+								<div class="card-body pt-2 pb-4 d-flex flex-wrap align-items-center">
+									<!--begin::Labels-->
+									<div class="d-flex flex-column content-justify-center flex-row-fluid">
+										<!--begin::Label-->
+										<div class="d-flex fw-semibold align-items-center">
+											<!--begin::Bullet-->
+											<div class="bullet w-8px h-3px rounded-2 bg-success me-3"></div>
+											<!--end::Bullet-->
+											<!--begin::Label-->
+											<div class="text-gray-500 flex-grow-1 me-4">Leaf CRM</div>
+											<!--end::Label-->
+											<!--begin::Stats-->
+											<div class="fw-bolder text-gray-700 text-xxl-end">$7,660</div>
+											<!--end::Stats-->
+										</div>
+										<!--end::Label-->
+										<!--begin::Label-->
+										<div class="d-flex fw-semibold align-items-center my-3">
+											<!--begin::Bullet-->
+											<div class="bullet w-8px h-3px rounded-2 bg-primary me-3"></div>
+											<!--end::Bullet-->
+											<!--begin::Label-->
+											<div class="text-gray-500 flex-grow-1 me-4">Mivy App</div>
+											<!--end::Label-->
+											<!--begin::Stats-->
+											<div class="fw-bolder text-gray-700 text-xxl-end">$2,820</div>
+											<!--end::Stats-->
+										</div>
+										<!--end::Label-->
+									</div>
+									<!--end::Labels-->
+								</div>
+								<!--end::Card body-->
+							</div>
+							<!--end::Card widget 17-->
+
+						</div>
+						<!--end::Col-->
+
+					</div>
+					<!--end::Row-->
+
+				</div>
+				<!--end::Content container-->
+			</div>
+			<!--end::Content-->
+
+			<div class="app-toolbar py-3 py-lg-6">
+				<!--begin::Toolbar container-->
+				<div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+					<!--begin::Page title-->
+					<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+						<!--begin::Title-->
+						<h1
+							class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+							Booking</h1>
+					</div>
+					<!--end::Page title-->
+				</div>
+				<!--end::Toolbar container-->
+			</div>
+			<!--begin::Content container-->
+			<div id="kt_app_content_container" class="app-container container-xxl mb-20">
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header border-0 pt-6">
+						<!--begin::Card title-->
+						<div class="card-title">
+							<!--begin::Search-->
+							<div class="d-flex align-items-center position-relative my-1">
+								<i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+									<span class="path1"></span>
+									<span class="path2"></span>
+								</i>
+								<input type="text" data-kt-user-table-filter="search"
+									class="form-control form-control-solid w-250px ps-13"
+									placeholder="Search user" />
+							</div>
+							<!--end::Search-->
+						</div>
+						<!--begin::Card title-->
+					<!--begin::Card toolbar-->
+						<div class="card-toolbar">
+							<!--begin::Toolbar-->
+							<div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+
+							</div>
+							<!--end::Toolbar-->
+							<!--begin::Group actions-->
+							<div class="d-flex justify-content-end align-items-center d-none"
+								data-kt-user-table-toolbar="selected">
+								<div class="fw-bold me-5">
+									<span class="me-2"
+										data-kt-user-table-select="selected_count"></span>Selected</div>
+								<button type="button" class="btn btn-danger"
+									data-kt-user-table-select="delete_selected">Delete Selected</button>
+							</div>
+							<!--end::Group actions-->
+
+
+						</div>
+					</div>
+					<!--end::Card header-->
+					<!--begin::Card body-->
+					<div class="card-body py-4">
+						<!--begin::Table-->
+						<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+							<thead>
+								<tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+									<th class="w-10px pe-2">
+									
+									</th>
+									<th class="min-w-125px">Sl</th>
+									<th class="min-w-125px">Name</th>
+									<th class="min-w-125px">WareHouse</th>
+									<th class="min-w-125px">Status</th>
+									<th class="min-w-125px">Action</th>
+									<th class="text-end min-w-100px">Invoice</th>
+								</tr>
+							</thead>
+							<tbody class="text-gray-600 fw-semibold">
+								{% for booking in bookings %}
+								<tr>
+									<td>
+
+									</td>
+									<td>{{ forloop.counter }}</td>
+									<td class="d-flex align-items-center">
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<a href=""
+												class="text-gray-800 text-hover-primary mb-1">{{booking.business.username}}</a>
+										</div>
+										<!--begin::User details-->
+									</td>
+									<td>
+										<div class="badge badge-light fw-bold">{{booking.warehouse.name}}</div>
+									</td>
+									<td id="bookingStatusTable{{booking.id}}">{{booking.status}}</td>
+									<td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingDetails{{booking.id}}">
+  Details
+</button>{%if request.user.account_type == "WAREHOUSE_OWNER" and booking.status and booking.is_owner_not_reviewed%}
+                <button type="button" class="btn btn-info" onclick="openrating('{{booking.id}}','{{booking.warehouse.name}}','{{booking.business.username}}','{{booking.quantity}}', '{{booking.area}}', '{{booking.Duration_Storage}}')">
+  Rate
+</button>
+              {%endif%}</td>
+									<td class="text-end">
+										<a class="btn btn-success" href="{% url 'core:download-invoice' booking.get_invoice.id 'view' %}">View</a>
+									</td>
+								</tr>
+							{%endfor%}
+
+							</tbody>
+						</table>
+						<!--end::Table-->
+	{% for booking in bookings %}
+      <div class="modal fade" id="bookingDetails{{booking.id}}" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="bookingModalLabel">Booking Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <p>Warehouse: {{booking.warehouse.name}}</p>
+          <p>Business Name: {{booking.business.username}}</p>
+          <p>Product: {{booking.product.name}}</p>
+          <p>Quantity: {{booking.quantity}}</p>
+          <p>Area: {{booking.area}}</p>
+          <p>Start date: {{booking.start_date}}</p>
+          <p>Duration_Storage: {{booking.Duration_Storage}}</p>
+          <p>Booking Time: {{booking.created_at}}</p>
+          <p id="bookingStatus{{booking.id}}">Status: {{booking.status}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          {%if booking.status == 'PENDING' and booking.status != 'DECLINE' %}
+          <button type="button" class="btn btn-primary" id="booking_approve_btn{{booking.id}}" onclick="statusChange('{{booking.id}}','APPROVED')">Approve</button>
+          {%endif%}
+			{% if booking.status != 'DECLINE' %}
+			<button type="button" class="btn btn-danger" id="booking_decline_btn{{booking.id}}" onclick="statusChange('{{booking.id}}','DECLINE')">Decline</button>
+			{%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+      {%endfor%}
+
+
+					</div>
+					<!--end::Card body-->
+				</div>
+				<!--end::Card-->
+			</div>
+
+
+		</div>
+								        <div class="modal fade" id="bookingReview" tabindex="-1" aria-labelledby="bookingReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="bookingReviewModalLabel">Booking Review</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <p id="warehouse-name"></p>
+          <p id="user-name"></p>
+          <p id="booking-quantity"></p>
+          <p id="booking-area"></p>
+          <p id="booking-duration"></p>
+          <form id="ratingForm" action="{% url 'core:owner_rating' %}" method="POST">
+					{% csrf_token %}
+					<h5>Write Your Review</h5>
+					<div>
+						<!-- Rating stars -->
+						<p style="float:left">How do you rate this user?</p>
+						</br>
+                <input type="hidden" id="booking-rating-id" name="booking_id" value=""/>
+					      <fieldset class="brating">
+                          <input type="radio" id="star5" name="brating" value="5" /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+                        <input type="radio" id="star4half" name="brating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" id="star4" name="brating" value="4" /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                        <input type="radio" id="star3half" name="brating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" id="star3" name="brating" value="3" /><label class="full" for="star3" title="Meh - 3 stars"></label>
+                        <input type="radio" id="star2half" name="brating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" id="star2" name="brating" value="2" /><label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" id="star1half" name="brating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" id="star1" name="brating" value="1" /><label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                        <input type="radio" id="starhalf" name="brating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                        <input type="radio" class="reset-option" name="brating" value="reset" />
+                    </fieldset>
+						    <br>
+						    <br>
+						    <textarea name="review" rows="4" class="form-control" placeholder="Write your review here..."></textarea>
+						    <br>
+                <input type="submit" value="Submit Review" class="btn btn-primary">
+					</div>
+
+				</form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+		<!--end::Content wrapper-->
+		<!--begin::Footer-->
+		<div id="kt_app_footer" class="app-footer">
+			<!--begin::Footer container-->
+			<div
+				class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+				<!--begin::Copyright-->
+				<div class="text-dark order-2 order-md-1">
+					<span class="text-muted fw-semibold me-1">2023&copy;</span>
+					<a href="https://quickit24.com/" target="_blank"
+						class="text-gray-800 text-hover-primary">Quickit24</a>
+				</div>
+				<!--end::Copyright-->
+				<!--begin::Menu-->
+				<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+					<li class="menu-item">
+						<a href="https://quickit24.com/about.html" target="_blank"
+							class="menu-link px-2">About</a>
+					</li>
+					<li class="menu-item">
+						<a href="https://quickit24.com/contact.html" target="_blank"
+							class="menu-link px-2">Support</a>
+					</li>
+				</ul>
+				<!--end::Menu-->
+			</div>
+			<!--end::Footer container-->
+		</div>
+		<!--end::Footer-->
+	</div>
+{%if request.user.account_type == "WAREHOUSE_OWNER" or request.user.account_type == "ADMIN" %}
+<div class="position-fixed top-20 end-0 p-3">
+  <div id="my-toast" class="toast text-bg-primary hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Success</strong>
+     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+	   <div class="toast-body">
+        Booking status changed successfully!
+      </div>
+  </div>
+</div>
+{%endif%}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+	{%if request.user.account_type == "WAREHOUSE_OWNER" or request.user.account_type == "ADMIN" %}
+            function statusChange(id, status) {
+		if(status == "APPROVED") {
+			$('#booking_approve_btn' + id).prop('disabled', true);
+			$('#booking_decline_btn' + id).prop('disabled', true);
+			$('#booking_approve_btn' + id).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
+		}
+		else {
+			$('#booking_decline_btn' + id).prop('disabled', true);
+			$('#booking_decline_btn' + id).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
+		}
+				var formData={"booking_id":id,
+			 				"status":status
+		}
+      $.ajax({
+      url: "{% url 'core:update_booking' %}",
+      type: 'post',
+      data: formData,
+      success: function(response) {
+		  console.log(document.getElementById('bookingStatus'+id));
+      document.getElementById('bookingStatus'+id).innerHTML = "Status: "+status;
+      document.getElementById('bookingStatusTable'+id).innerHTML = status;
+	  if(status == "APPROVED") {
+			document.getElementById('booking_approve_btn'+id).remove();
+			$('#booking_decline_btn' + id).prop('disabled', false);
+		}
+		else {
+			document.getElementById('booking_decline_btn'+id).remove();
+	  }
+      var myToast = new bootstrap.Toast(document.getElementById('my-toast'));
+      myToast.show();
+      },
+      error: function (error){
+
+           alert("Something went wrong!!! Try Again");
+                return;
+      }
+    });
+        }
+        function openrating(id,warehouse_name,user_name,quantity,area,duration){
+                 $('#warehouse-name').html("Warehouse: "+warehouse_name);
+                 $('#user-name').html("Business: "+user_name);
+                 $('#booking-quantity').html("Quantity: "+quantity);
+                 $('#booking-area').html("Area: "+area);
+                 $('#booking-duration').html("Duration: "+duration);
+                 $('#booking-rating-id').val(id);
+                $('#bookingReview').modal('show');
+
+        }
+
+           {%endif%}
+</script>
+
+	{% endblock main %}

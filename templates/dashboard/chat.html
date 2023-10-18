@@ -1,0 +1,378 @@
+{% extends 'dashboard/dsbase.html' %}
+{% load static %}
+
+{% block main %}
+<style>
+	.friend-list {
+  list-style: none;
+    overflow-y: scroll;
+}
+		a {
+ color: var(--bs-text-muted);
+}
+	.friend-list li.active a {
+ color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+}
+	.is_active{
+  display: block !important;
+		color: #0a53be;
+}
+	.hide{
+  display: none;
+}
+</style>
+<!--begin::Main-->
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main" xmlns="http://www.w3.org/1999/html"
+	 xmlns="http://www.w3.org/1999/html">
+	<!--begin::Content wrapper-->
+	<div class="d-flex flex-column flex-column-fluid">
+		<!--begin::Toolbar-->
+		<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+			<!--begin::Toolbar container-->
+			<div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+				<!--begin::Page title-->
+				<div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+					<!--begin::Title-->
+					<h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+						Private Chat</h1>
+					<!--end::Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+						<!--begin::Item-->
+						<li class="breadcrumb-item text-muted">
+							<a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Dashboard</a>
+						</li>
+						<!--end::Item-->
+						<!--begin::Item-->
+						<li class="breadcrumb-item">
+							<span class="bullet bg-gray-400 w-5px h-2px"></span>
+						</li>
+						<!--end::Item-->
+						<!--begin::Item-->
+						<li class="breadcrumb-item text-muted">Chat</li>
+						<!--end::Item-->
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page title-->
+			</div>
+			<!--end::Toolbar container-->
+		</div>
+		<!--end::Toolbar-->
+		 {% if request.user.is_authenticated %}
+        <input type="hidden" id="logged-in-user" value="{{ user.id }}">
+                <input type="hidden" id="selfname" value="{{ user.get_full_name }}">
+    {% endif %}
+		<!--begin::Content-->
+		<div id="kt_app_content" class="app-content flex-column-fluid">
+			<!--begin::Content container-->
+			<div id="kt_app_content_container" class="app-container container-xxl">
+				<!--begin::Layout-->
+				<div class="d-flex flex-column flex-lg-row">
+					<!--begin::Sidebar-->
+					<div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0">
+						<!--begin::Contacts-->
+						<div class="card card-flush">
+							<!--begin::Card header-->
+							<div class="card-header pt-7" id="kt_chat_contacts_header">
+								<!--begin::Form-->
+								<form class="w-100 position-relative" autocomplete="off">
+									<!--begin::Icon-->
+									<i
+										class="ki-duotone ki-magnifier fs-3 text-gray-500 position-absolute top-50 ms-5 translate-middle-y">
+										<span class="path1"></span>
+										<span class="path2"></span>
+									</i>
+									<!--end::Icon-->
+									<!--begin::Input-->
+									<input type="text" class="form-control form-control-solid px-13" name="search"
+										value="" placeholder="Search by username or email..." />
+									<!--end::Input-->
+								</form>
+								<!--end::Form-->
+							</div>
+							<!--end::Card header-->
+							<!--begin::Card body-->
+							<div class="card-body pt-5" id="kt_chat_contacts_body">
+								<!--begin::List-->
+								<ul class="friend-list">
+                 				{% for thread in Threads %}
+									 <li class="{% if forloop.first %}active{% endif %} bounceInDown contact-li" chat-id="chat_{{ thread.pk }}">
+                	<a href="chat/#" class="clearfix">
+								<div class="scroll-y me-n5 pe-5 h-200px h-lg-auto active" data-kt-scroll="true"
+									data-kt-scroll-activate="{default: false, lg: true}"
+									data-kt-scroll-max-height="auto"
+									data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header"
+									data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body"
+									data-kt-scroll-offset="5px">
+									<!--begin::User-->
+									<div class="d-flex flex-stack py-4">
+										<!--begin::Details-->
+										<div class="d-flex align-items-center">
+											<!--begin::Avatar-->
+											<div class="symbol symbol-45px symbol-circle">
+												<span
+													class="symbol-label bg-light-danger text-danger fs-6 fw-bolder">M</span>
+												<div
+													class="symbol-badge bg-success start-100 top-100 border-4 h-8px w-8px ms-n2 mt-n2">
+												</div>
+											</div>
+											<!--end::Avatar-->
+											<!--begin::Details-->
+											<div class="ms-5">
+												 {% if thread.first_person == request.user %}
+                			<strong>{{ thread.second_person.get_full_name }}</strong>
+												<div class="fw-semibold text-muted">{{ thread.second_person.email }}
+												</div>
+                            {%else%}
+                            <strong>{{ thread.first_person.get_full_name }}</strong>
+												<div class="fw-semibold text-muted">{{ thread.first_person.email }}</div>
+                            {%endif%}
+
+											</div>
+											<!--end::Details-->
+										</div>
+										<!--end::Details-->
+										<!--begin::Lat seen-->
+										<div class="d-flex flex-column align-items-end ms-2">
+											 {% with last_message=thread.message_thread.last %}
+        {% if last_message %}
+                        {%if last_message.user == request.user%}
+                        <small class="time text-muted">{% if last_message.created_at.date == now.date %}
+    {{ last_message.created_at|timesince }} ago
+{% else %}
+    {{ last_message.created_at|date:"d M" }}
+{% endif %}</small>
+                		<small class="chat-alert text-muted"><i class="fa fa-check"></i></small>
+                        {%else%}
+                         <small class="time text-muted">
+                             {% if last_message.created_at.date == now.date %}
+    {{ last_message.created_at|timesince }} ago
+{% else %}
+    {{ last_message.created_at|date:"d M" }}
+{% endif %}
+                         </small>
+                        <small class="chat-alert label label-danger">1</small>
+                        {%endif%}
+        {% endif %}
+    {% endwith %}
+										</div>
+										<!--end::Lat seen-->
+									</div>
+									<!--end::User-->
+									<!--begin::Separator-->
+									<div class="separator separator-dashed d-none"></div>
+									<!--end::Separator-->
+	
+								</div>
+					</a>
+									 </li>
+									{%endfor%}
+								<!--end::List-->
+						</ul>
+							</div>
+							<!--end::Card body-->
+						</div>
+						<!--end::Contacts-->
+					</div>
+					<!--end::Sidebar-->
+					<!--begin::Content-->
+					<div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
+						{% for thread in Threads %}
+						<!--begin::Messenger-->
+						<div class="card chat-message {% if forloop.first %}hide is_active{% else %}hide{% endif %}" chat-id="chat_{{ thread.pk }}" other-user-id="
+                                        {% if thread.first_person == request.user %}
+                                            {{ thread.second_person.id }}
+                                        {% else %}
+                                            {{ thread.first_person.id }}
+                                        {% endif %}" id="kt_chat_messenger">
+							<!--begin::Card header-->
+							<div class="card-header" id="kt_chat_messenger_header">
+								<!--begin::Title-->
+								<div class="card-title">
+									<!--begin::User-->
+									<div class="d-flex justify-content-center flex-column me-3">
+										<a href="#"
+											class="fs-4 fw-bold text-gray-900 text-hover-primary me-1 mb-2 lh-1">{% if thread.first_person == request.user %}
+                                            {{ thread.second_person.get_full_name }}
+                                        {% else %}
+                                            {{ thread.first_person.get_full_name }}
+                                        {% endif %}</a>
+										<!--begin::Info-->
+										<div class="mb-0 lh-1">
+											<span class="badge badge-success badge-circle w-10px h-10px me-1"></span>
+											<span class="fs-7 fw-semibold text-muted">Active</span>
+										</div>
+										<!--end::Info-->
+									</div>
+									<!--end::User-->
+								</div>
+								<!--end::Title-->
+							
+							</div>
+							<!--end::Card header-->
+							<!--begin::Card body-->
+							<div class="card-body chat" id="kt_chat_messenger_body">
+								<!--begin::Messages-->
+								<div class="scroll-y me-n5 pe-5 h-300px h-lg-auto message" data-kt-element="messages"
+									data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+									data-kt-scroll-max-height="auto"
+									data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_app_toolbar, #kt_toolbar, #kt_footer, #kt_app_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer"
+									data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_messenger_body"
+									data-kt-scroll-offset="5px">
+									{% for chat in thread.message_thread.all %}
+									 {% if chat.user != request.user %}
+									<!--begin::Message(in)-->
+									<div class="d-flex justify-content-start mb-10" data-message-id="{{ chat.pk }}">
+										<!--begin::Wrapper-->
+										<div class="d-flex flex-column align-items-start">
+											<!--begin::User-->
+											<div class="d-flex align-items-center mb-2">
+												<!--begin::Avatar-->
+												<div class="symbol symbol-35px symbol-circle">
+													<img alt="Pic" src="assets/media/avatars/300-25.jpg" />
+												</div>
+												<!--end::Avatar-->
+												<!--begin::Details-->
+												<div class="ms-3">
+													<a href="#"
+														class="fs-5 fw-bold text-gray-900 text-hover-primary me-1">{{chat.user.get_full_name}}</a>
+													<span class="text-muted fs-7 mb-1">{% if chat.created_at.date == now.date %}
+    {{ chat.created_at|timesince }}
+{% else %}
+    {{ chat.created_at|date:"d M" }}
+{% endif %}</span>
+												</div>
+												<!--end::Details-->
+											</div>
+											<!--end::User-->
+											<!--begin::Text-->
+											<div class="p-5 rounded bg-light-info text-dark fw-semibold mw-lg-400px text-start"
+												data-kt-element="message-text">  {% autoescape off %}
+                                                {{ chat.message }}
+                                            {% endautoescape %}</div>
+											<!--end::Text-->
+										</div>
+										<!--end::Wrapper-->
+									</div>
+									{%else%}
+									<!--end::Message(in)-->
+									<!--begin::Message(out)-->
+									<div class="d-flex justify-content-end mb-10" data-message-id="{{ chat.pk }}">
+										<!--begin::Wrapper-->
+										<div class="d-flex flex-column align-items-end">
+											<!--begin::User-->
+											<div class="d-flex align-items-center mb-2">
+												<!--begin::Details-->
+												<div class="me-3">
+													<span class="text-muted fs-7 mb-1">  {% if chat.created_at.date == now.date %}
+    {{ chat.created_at|timesince }} ago
+{% else %}
+    {{ chat.created_at|date:"d M" }}
+{% endif %}</span>
+													<a href="#"
+														class="fs-5 fw-bold text-gray-900 text-hover-primary ms-1">You</a>
+												</div>
+												<!--end::Details-->
+												<!--begin::Avatar-->
+												<div class="symbol symbol-35px symbol-circle">
+													<img alt="Pic" src="https://bootdey.com/img/Content/user_1.jpg" id="selfimg" />
+												</div>
+												<!--end::Avatar-->
+											</div>
+											<!--end::User-->
+											<!--begin::Text-->
+											<div class="p-5 rounded bg-light-primary text-dark fw-semibold mw-lg-400px text-end"
+												data-kt-element="message-text">	 {% autoescape off %}
+                                                {{ chat.message }}
+                                            {% endautoescape %}</div>
+											<!--end::Text-->
+										</div>
+										<!--end::Wrapper-->
+									</div>
+									<!--end::Message(out)-->
+									{%endif%}
+									{%endfor%}
+
+								</div>
+								<!--end::Messages-->
+							</div>
+							<!--end::Card body-->
+						</div>
+						{%endfor%}
+						<div class="card">
+							<!--begin::Card footer-->
+							<div class="card-footer pt-4" id="kt_chat_messenger_footer">
+								<!--begin::Input-->
+								<form id="send-message-form">
+								<textarea class="form-control form-control-flush mb-3" rows="1" id="input-message" data-kt-element="input"
+									placeholder="Type a message" required></textarea>
+								<!--end::Input-->
+								<!--begin:Toolbar-->
+								<div class="d-flex flex-stack">
+									<!--begin::Actions-->
+									<div class="d-flex align-items-center me-2">
+										<button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button"
+											data-bs-toggle="tooltip" title="Coming soon">
+											<i class="ki-duotone ki-paper-clip fs-3"></i>
+										</button>
+										<button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button"
+											data-bs-toggle="tooltip" title="Coming soon">
+											<i class="ki-duotone ki-exit-up fs-3">
+												<span class="path1"></span>
+												<span class="path2"></span>
+											</i>
+										</button>
+									</div>
+									<!--end::Actions-->
+									<!--begin::Send-->
+									<button class="btn btn-primary" type="submit">Send</button>
+									<!--end::Send-->
+								</div>
+								</form>
+								<!--end::Toolbar-->
+							</div>
+							<!--end::Card footer-->
+						</div>
+						<!--end::Messenger-->
+					</div>
+					<!--end::Content-->
+				</div>
+				<!--end::Layout-->
+
+			</div>
+			<!--end::Content container-->
+		</div>
+		<!--end::Content-->
+	</div>
+	<!--end::Content wrapper-->
+
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'assets/js/custom/utilities/modals/users-search.js' %}"></script>
+<script>
+	     $(document).on('click','.contact-li', function (){
+
+
+           $('.active.contact-li').removeClass('active')
+    $(this).addClass('active')
+
+    // message wrappers
+    let chat_id = $(this).attr('chat-id')
+    $('.chat-message.is_active').removeClass('is_active')
+    $('.chat-message[chat-id="' + chat_id +'"]').addClass('is_active')
+        $('.card.chat-message[chat-id="' + chat_id + '"] .chat .message').animate({
+        scrollTop:  $('.card.chat-message[chat-id="' + chat_id + '"] .chat .message').prop("scrollHeight")
+    }, 500);
+
+
+})
+</script>
+
+<script type="text/javascript" src="{% static 'js/inbox_new.js' %}">
+{% endblock main %}
+
+{% block scripts %}
+
+{% endblock scripts %}

@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvipoA5dBlxWXuXctizbINF1YYuWUzvBQ&libraries=places"></script>
+<style>
+         #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+<section>
+    <div class="container" id="search-location-layout" style="min-height:800px">
+        <aside class="side-bar">
+
+            <div class="aside-header">
+                <h2>Recherche d'entrepôt</h2>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+            <div class="service-search-section">
+                <div class="searchbox-search">
+                    <p>Localisation</p>
+                   <input type="search" class="form-control" id="location" name="location" placeholder="Enter a location...">
+      <datalist id="location-suggestions"></datalist>
+                </div>
+            </div>
+
+            <div class="select-search">
+                <p>Prestation recherchée</p>
+                <select class="form-control" name="service">
+                    <option value="" selected>Select</option>
+                    {%for s in services %}
+                    <option value="{{s.name}}">{{s.name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+
+            <div class="checkbox-search">
+                <p>Transport proposé</p>
+                <input type="checkbox"  name="transport" value="Transport">
+            </div>
+
+            <div class="select-search">
+                <p>Température recherchée</p>
+                <select class="form-control" name="temperature">
+                    <option value="" selected>Select</option>
+                    {%for t in temperatures %}
+                    <option value="{{t.id}}">{{t.name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+
+            <div class="service-search-botton">
+                <button type="submit"
+                    class="btn btn-primary rounded-pill py-2 px-4 me-2 text-center">Rechercher</button>
+            </div>
+            </form>
+
+
+            <div class="location-list-header">
+                <p>Prix de référence</p>
+            </div>
+
+            {% for warehouse in warehouses %}
+
+            <div class="single-location-list-item" id="open-popup{{warehouse.pk}}">
+
+                {% for photo in warehouse.photos.all %}
+                <img src="{{ photo.photo.url }}" alt="Warehouse Photo">
+                {% endfor %}
+                <div class="single-location-list-item-text">
+                    <ul>
+                        <li>
+
+                            <h4> <span> {{ warehouse.name }} </span></h4>
+
+                            <div class="rating-location">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="location-popup" id="location-popup{{warehouse.pk}}">
+
+                <div class="popup-header">
+                    <div class="popup-close-btn" id="popup-close-btn{{warehouse.pk}}">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    {% for photo in warehouse.photos.all %}
+                    <img src="{{ photo.photo.url }}" alt="Warehouse Photo">
+                    {% endfor %}
+                    <h4> <span> {{ warehouse.name }} </span></h4>
+                </div>
+
+                <div class="popup-content">
+                    <div class="popup-rating">
+                        <p> <strong>4 </strong> / 5 </p>
+                        <div class="rating-location">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+
+                    <div class="popup-text">
+                        <h4>Taille de l'entrepôt</h4>
+                        <h2>{{ warehouse.size }} <span>m²</span></h2>
+                    </div>
+
+                    <div class="popup-text">
+                        <h4>Disponibilité</h4>
+                        <h2>{{ warehouse.availability }}</h2>
+                    </div>
+
+                    <div class="popup-text">
+                        <h4>Accessibilité</h4>
+                        <h2>{{ warehouse.accessibility }}</h2>
+                    </div>
+
+                </div>
+
+                <div class="location-popup-botton">
+                    <a href="{% url 'core:warehouse_details' warehouse.pk %}" type="button" class="btn btn-primary rounded-pill py-2 px-4 me-2 text-center">Plus de détails</a>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </aside>
+
+        <main>
+
+            <div class="location-map">
+                <div class="mapouter">
+                    <div class="gmap_canvas">
+                        <div id="map"></div>
+                        <div class="mapouter">
+                            <div class="gmap_canvas">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+
+    </div>
+</section>
+<script>
+
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: { lat: 31.7917, lng: -7.0926 }
+        });
+         {% for warehouse in warehouses %}
+         var locationString = "{{ warehouse.location }}";
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: locationString }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+      var latitude = results[0].geometry.location.lat();
+      var longitude = results[0].geometry.location.lng();
+
+      var location = { lat: latitude, lng: longitude };
+      var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        title: '{{ warehouse.name }}'
+      });
+
+      marker.addListener('click', function() {
+        var elements = document.querySelectorAll('.location-popup');
+                for (var i = 0; i < elements.length; i++) {
+                  elements[i].style.display = 'none';
+                }
+           document.getElementById("location-popup{{warehouse.pk}}").style.display = "block";
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+        {% endfor %}
+      }
+      initMap()
+       {% for warehouse in warehouses %}
+      document.getElementById("open-popup{{warehouse.pk}}").addEventListener('click', function(){
+          var elements = document.querySelectorAll('.location-popup');
+                    for (var i = 0; i < elements.length; i++) {
+                      elements[i].style.display = 'none';
+                    }
+    document.getElementById("location-popup{{warehouse.pk}}").style.display = "block";
+
+})
+
+document.getElementById("popup-close-btn{{warehouse.pk}}").addEventListener('click', function(){
+    document.getElementById("location-popup{{warehouse.pk}}").style.display = "none";
+
+})
+    {% endfor %}
+
+
+    var autocomplete = new google.maps.places.Autocomplete(document.getElementById('location'));
+      autocomplete.addListener('place_changed', function() {
+        var place = autocomplete.getPlace();
+        var predictions = place.predictions;
+        var suggestionsList = document.getElementById('location-suggestions');
+        suggestionsList.innerHTML = '';
+        predictions.forEach(function(prediction) {
+          var option = document.createElement('option');
+          option.value = prediction.description;
+          suggestionsList.appendChild(option);
+        });
+      });
+
+</script>
+
+
+{% endblock main %}

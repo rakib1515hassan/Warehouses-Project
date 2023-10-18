@@ -1,0 +1,446 @@
+{% load static %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.bundle.css' %}" rel="stylesheet" type="text/css"/>
+<script src="{% static 'js/scripts.bundle.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<div class="my-10 text-center">
+  <h1>Add Warehouse</h1>
+</div>
+<!--begin::Stepper-->
+<div class="container  mt-10">
+<!--begin::Stepper-->
+<div class="stepper stepper-pills" id="kt_stepper_example_basic">
+  <!--begin::Nav-->
+  <div class="stepper-nav flex-center flex-wrap mb-10">
+      <!--begin::Step 1-->
+      <div class="stepper-item mx-8 my-4 current" data-kt-stepper-element="nav">
+          <!--begin::Wrapper-->
+          <div class="stepper-wrapper d-flex align-items-center">
+              <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                  <i class="stepper-check fas fa-check"></i>
+                  <span class="stepper-number">1</span>
+              </div>
+              <!--end::Icon-->
+  
+              <!--begin::Label-->
+              <div class="stepper-label">
+                  <h3 class="stepper-title">
+                      Step 1
+                  </h3>
+  
+                  <div class="stepper-desc">
+                    MY WAREHOUSE
+                  </div>
+              </div>
+              <!--end::Label-->
+          </div>
+          <!--end::Wrapper-->
+  
+          <!--begin::Line-->
+          <div class="stepper-line h-40px"></div>
+          <!--end::Line-->
+      </div>
+      <!--end::Step 1-->
+  
+      <!--begin::Step 2-->
+      <div class="stepper-item mx-8 my-4" data-kt-stepper-element="nav">
+          <!--begin::Wrapper-->
+          <div class="stepper-wrapper d-flex align-items-center">
+               <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                  <i class="stepper-check fas fa-check"></i>
+                  <span class="stepper-number">2</span>
+              </div>
+              <!--begin::Icon-->
+  
+              <!--begin::Label-->
+              <div class="stepper-label">
+                  <h3 class="stepper-title">
+                      Step 2
+                  </h3>
+  
+                  <div class="stepper-desc">
+                    IMAGES
+                  </div>
+              </div>
+              <!--end::Label-->
+          </div>
+          <!--end::Wrapper-->
+  
+          <!--begin::Line-->
+          <div class="stepper-line h-40px"></div>
+          <!--end::Line-->
+      </div>
+      <!--end::Step 2-->
+  
+      <!--begin::Step 3-->
+      <div class="stepper-item mx-8 my-4" data-kt-stepper-element="nav">
+          <!--begin::Wrapper-->
+          <div class="stepper-wrapper d-flex align-items-center">
+               <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                  <i class="stepper-check fas fa-check"></i>
+                  <span class="stepper-number">3</span>
+              </div>
+              <!--begin::Icon-->
+  
+              <!--begin::Label-->
+              <div class="stepper-label">
+                  <h3 class="stepper-title">
+                      Step 3
+                  </h3>
+  
+                  <div class="stepper-desc">
+                    OTHER INFORMATION
+                  </div>
+              </div>
+              <!--end::Label-->
+          </div>
+          <!--end::Wrapper-->
+  
+          <!--begin::Line-->
+          <div class="stepper-line h-40px"></div>
+          <!--end::Line-->
+      </div>
+      <!--end::Step 3-->
+  
+      <!--begin::Step 4-->
+      <div class="stepper-item mx-8 my-4" data-kt-stepper-element="nav">
+          <!--begin::Wrapper-->
+          <div class="stepper-wrapper d-flex align-items-center">
+               <!--begin::Icon-->
+              <div class="stepper-icon w-40px h-40px">
+                  <i class="stepper-check fas fa-check"></i>
+                  <span class="stepper-number">4</span>
+              </div>
+              <!--begin::Icon-->
+  
+              <!--begin::Label-->
+              <div class="stepper-label">
+                  <h3 class="stepper-title">
+                      Step 4
+                  </h3>
+  
+                  <div class="stepper-desc">
+                    SERVICES & PRICING
+                  </div>
+              </div>
+              <!--end::Label-->
+          </div>
+          <!--end::Wrapper-->
+  
+          <!--begin::Line-->
+          <div class="stepper-line h-40px"></div>
+          <!--end::Line-->
+      </div>
+      <!--end::Step 4-->
+  </div>
+  <!--end::Nav-->
+  
+      <!--begin::Form-->
+      <form class="form w-lg-500px mx-auto" novalidate="novalidate" id="kt_stepper_example_basic_form" name="add_warehouse" method="POST" enctype="multipart/form-data">
+          <!--begin::Group-->
+          <div class="mb-5">
+              <!--begin::Step 1-->
+              <div class="flex-column current" data-kt-stepper-element="content">
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-10">
+                      <!--begin::Label-->
+                      <label class="form-label">Warehouse Location</label>
+                      <!--end::Label-->
+  
+                      <!--begin::Input-->
+                      <input class="form-control" type="text" id="location" name="location" placeholder="Enter a location..." autocomplete="address-line1">
+                      <input type="hidden" name="location_coordinates" id="location-coordinates">
+                      <!--end::Input-->
+                  </div>
+                  <!--end::Input group-->
+  
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-10">
+                    <label for="id_name" class="form-label">Warehouse Name</label>
+                    <input name="name" type="text" class="form-control" id="id_name" required>
+                  </div>
+                  <!--end::Input group-->
+  
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-10">
+                    <label for="id_size" class="form-label">Warehouse Size</label>
+                    <input name="size" type="text" class="form-control" id="id_size" required>
+                  </div>
+                  <!--end::Input group-->
+              </div>
+              <!--begin::Step 1-->
+  
+              <!--begin::Step 1-->
+              <div class="flex-column" data-kt-stepper-element="content">
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-10">
+                    <div class="col-12 mb-4">
+                      <label for="id_photos" class="form-label">Photos</label>
+                      <input name="photos" type="file" class="form-control" id="id_photos" multiple>
+                    </div>
+                  </div>
+                  <!--end::Input group-->
+
+              </div>
+              <!--begin::Step 1-->
+  
+              <!--begin::Step 1-->
+              <div class="flex-column" data-kt-stepper-element="content">
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-10">
+                    <label for="id_availability" class="form-label">Availability</label>
+                    <select class="form-select" name="availability" id="id_availability" required>
+                      {% for avil in availability %}
+                      <option value="{{ avil.id }}">{{ avil.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <!--end::Input group-->
+  
+                  <!--begin::Input group-->
+                  <div class="fv-row mb-10">
+                    <label for="id_accessibility" class="form-label">Accessibility:</label>
+                    <select class="form-select" name="accessibility" id="id_accessibility" required>
+                      {% for access in accessibility %}
+                      <option value="{{ access.id }}">{{ access.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_warehouse_type" class="form-label">Warehouse Type:</label>
+                    <select class="form-select" name="warehouse_type" id="id_warehouse_type" required>
+                      {% for wtype in warehouse_type %}
+                      <option value="{{ wtype.id }}">{{ wtype.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_storage_temperature" class="form-label">Storage temperature</label>
+                    <select class="form-select" name="storage_temperature" id="id_storage_temperature" required>
+                      {% for stem in storage_temperature %}
+                      <option value="{{ stem.id }}">{{ stem.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_workforce" class="form-label">Workforce</label>
+                    <select class="form-select" name="workforce" id="id_workforce" required>
+                      
+                      {% for workf in workforce %}
+                      <option value="{{ workf.id }}">{{ workf.name }}</option>
+                      {% endfor %}
+                        
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_warehouse_classification" class="form-label">Warehouse Classification</label>
+                    <select class="form-select" name="warehouse_classification" id="id_warehouse_classification" required>
+                      
+                      {% for wclass in warehouse_Classification %}
+                      <option value="{{ wclass.id }}">{{ wclass.name }}</option>
+                      {% endfor %}
+                        
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_storage_space_type" class="form-label">Storage space type</label>
+                    <select class="form-select" name="storage_space_type" id="id_storage_space_type" multiple >
+                      
+                      {% for storage_s_type in storage_space_type %}
+                      <option value="{{ storage_s_type.id }}">{{ storage_s_type.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_equipment" class="form-label">Equipment</label>
+                    <select class="form-select" name="equipment" id="id_equipment" multiple >
+                      {% for equipment in equipments %}
+                      <option value="{{ equipment.id }}">{{ equipment.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_security" class="form-label">Security</label>
+                    <select class="form-select" name="security" id="id_security" multiple >
+                      {% for secu in security %}
+                      <option value="{{ secu.id }}">{{ secu.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_services_offered" class="form-label">Services offered</label>
+                    <select class="form-select" name="services_offered" id="id_services_offered" multiple >
+                      {% for service_offer in services_Offered %}
+                      <option value="{{ service_offer.id }}">{{ service_offer.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <div id="emailHelp" class="form-text">Hold down “Control”, or “Command” on a Mac, to select more than one.</div>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_order_taking_time" class="form-label">Order taking time</label>
+                    <select class="form-select" name="order_taking_time" id="id_order_taking_time" required>
+                      {% for order_taking in order_taking_time %}
+                      <option value="{{ order_taking.id }}">{{ order_taking.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_flexibility_transport_appointments" class="form-label">Flexibility transport appointments</label>
+                    <input name="flexibility_transport_appointments" type="text" class="form-control" id="id_flexibility_transport_appointments" required>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_flexible_hours" class="form-label">Flexible hours:</label>
+                    <select class="form-select" name="flexible_hours" id="id_flexible_hours" required>
+                      {% for flexible in flexible_hours %}
+                      <option value="{{ flexible.id }}">{{ flexible.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_authorization_access_people_outside" class="form-label">Authorization access people outside:</label>
+                    <input name="authorization_access_people_outside" type="text" class="form-control" id="id_authorization_access_people_outside" required>
+                  </div>
+                  <div class="fv-row mb-10">
+                    <label for="id_Insurance" class="form-label">Insurance</label>
+                    <select class="form-select" name="Insurance" id="id_Insurance" required>
+                      {% for in in insurance %}
+                      <option value="{{ in.id }}">{{ in.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <!--end::Input group-->
+              </div>
+              <!--begin::Step 1-->
+  
+              <!--begin::Step 1-->
+              <div class="flex-column" data-kt-stepper-element="content">
+
+                  <div class="fv-row mb-10">
+                    <label for="id_price" class="form-label">Warehouse Price</label>
+                    <input name="price" type="text" class="form-control" id="id_price" required>
+                  </div>
+                  <!--end::Input group-->
+              </div>
+              <!--begin::Step 1-->
+          </div>
+          <!--end::Group-->
+  
+          <!--begin::Actions-->
+          <div class="d-flex flex-stack">
+              <!--begin::Wrapper-->
+              <div class="me-2">
+                  <button type="button" class="btn btn-light btn-active-light-primary" data-kt-stepper-action="previous">
+                      Back
+                  </button>
+              </div>
+              <!--end::Wrapper-->
+  
+              <!--begin::Wrapper-->
+              <div>
+                  <button type="submit" class="btn btn-primary" data-kt-stepper-action="submit">
+                      <span class="indicator-label">
+                        Create a Warehouse
+                      </span>
+                      <span class="indicator-progress">
+                          Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                      </span>
+                  </button>
+  
+                  <button type="button" class="btn btn-primary" data-kt-stepper-action="next">
+                      Continue
+                  </button>
+              </div>
+              <!--end::Wrapper-->
+          </div>
+          <!--end::Actions-->
+          {% csrf_token %}
+      </form>
+      <!--end::Form-->
+  </div>
+  <!--end::Stepper-->
+</div>
+<!--end::Stepper-->
+
+
+
+<!--     
+   <h1 class="mt-5">Create Warehouse</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        <input type="text" id="location" name="location" placeholder="Enter a location...">
+        <datalist id="location-suggestions"></datalist>
+      {{ form.as_p }}
+          {% if photos %}
+        <h3>Existing photos:</h3>
+        <div class="photos">
+          {% for photo in photos %}
+          <div class="photo">
+            <img src="{{ photo.photo.url }}" alt="{{ photo.warehouse.name }}">
+            <input type="checkbox" name="delete_photos" value="{{ photo.id }}">Delete
+          </div>
+          {% endfor %}
+        </div>
+    {% endif %}
+  
+      <button type="submit">Submit</button>
+    </form> -->
+
+
+
+{% block script %}
+  
+
+<script>
+ $("#location").autocomplete({
+    source: function(request, response) {
+      $.ajax({
+        url: "https://api.mapbox.com/geocoding/v5/mapbox.places/" + request.term + ".json",
+        method: "GET",
+        data: {
+          access_token: "pk.eyJ1IjoiYWxpbmFjaXJpIiwiYSI6ImNsaWF4YjZqMzA4Y3ozc3FwanJ1Znkyd2IifQ.bG2Qbj0uqd8ZdqwFul9a-w"
+        },
+        success: function(data) {
+          response(data.features.map(function(feature) {
+            return {
+              label: feature.place_name,
+              value: feature.place_name,
+              latitude: feature.geometry.coordinates[1],
+              longitude: feature.geometry.coordinates[0]
+            };
+          }));
+        }
+      });
+    },
+    select: function(event, ui) {
+      $("#location-coordinates").val(ui.item.latitude + "," + ui.item.longitude);
+    }
+  });
+</script>
+  {% endblock script %}
+  <script>
+// Stepper lement
+var element = document.querySelector("#kt_stepper_example_basic");
+
+// Initialize Stepper
+var stepper = new KTStepper(element);
+
+// Handle next step
+stepper.on("kt.stepper.next", function (stepper) {
+    stepper.goNext(); // go next step
+});
+
+// Handle previous step
+stepper.on("kt.stepper.previous", function (stepper) {
+    stepper.goPrevious(); // go previous step
+});
+    </script>

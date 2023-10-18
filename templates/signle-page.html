@@ -1,0 +1,503 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block main %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+
+<style>
+    .rating {
+        border: none;
+        float: left;
+        margin-left: -220px;
+    }
+
+    .myratings {
+        font-size: 50px;
+        color: green
+    }
+
+    .rating>[id^="star"] {
+        display: none
+    }
+
+    .rating>label:before {
+        margin: 5px;
+        font-size: 2.0em;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f005"
+    }
+
+    .rating>.half:before {
+        content: "\f089";
+        position: absolute
+    }
+
+    .rating>label {
+        color: #ddd;
+        float: right
+    }
+
+    .rating>[id^="star"]:checked~label,
+    .rating:not(:checked)>label:hover,
+    .rating:not(:checked)>label:hover~label {
+        color: #FFD700
+    }
+
+    .rating>[id^="star"]:checked+label:hover,
+    .rating>[id^="star"]:checked~label:hover,
+    .rating>label:hover~[id^="star"]:checked~label,
+    .rating>[id^="star"]:checked~label:hover~label {
+        color: #FFED85
+    }
+
+    .reset-option {
+        display: none
+    }
+</style>
+
+<div class="container" style="margin-top: 120px;">
+    <div class="text-center py-2 ">
+
+
+        {% for photo in warehouse.photos.all %}
+        <img src="{{ photo.photo.url }}" class="my-2 rounded-3" style="width: 100%; height: 400px; object-fit: cover;">
+        {% endfor %}
+
+        <h1 class="my-5"> {{ warehouse.name }}</h1>
+        {%if warehouse.size > 0 and request.user != warehouse.owner %}
+        <a {% if request.user.is_authenticated and request.user.is_email_verified %}data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+           {% elif not request.user.is_email_verified and request.user.is_authenticated%}
+           href="{% url 'account:not_verified' %}"
+           {%else%}
+            href="/account/login/?next=/warehouse/{{warehouse.pk}}/"
+           {%endif%}
+            class="btn btn-primary rounded-1 py-2 px-4 fs-4">Request for quote</a>
+        {%endif%}
+    </div>
+    <div class="d-flex flex-wrap justify-content-between my-5 p-3 text-center rounded-3">
+        <div>
+            <h4><b class="text-danger">4</b> / 5</h4>
+            <h1>★★★★★</h1>
+        </div>
+        <div>
+            <h4>Taille de l'entrepôt</h4>
+            <h1 class=""><span>{{ warehouse.size }}</span>m<sup>2</sup></h1>
+        </div>
+        <div>
+            <h4>Disponibilité</h4>
+            <h1>{{ warehouse.availability }}</h1>
+        </div>
+        <div>
+            <h4>Accessibilité</h4>
+            <h1>{{ warehouse.accessibility }}</h1>
+        </div>
+    </div>
+    <div class="row m-auto" data-masonry='{"percentPosition": true }'>
+            <div class="rounded-3 p-3 bg-light col-6" style="max-width:48%; margin:10px;">
+                <h3>
+                    <span><i class="fa fa-home" aria-hidden="true"></i> Premises and accessibility</span>
+                </h3>
+                <div>
+                    <h6 class="my-3">Type de l'entrepôt <span class="bg-primary rounded-3 p-1 text-white">
+                            {{ warehouse.warehouse_type }} </span>
+                    </h6>
+                </div>
+                <div>
+                    <h6 class="my-3">Storage temperature(s)</h6>
+                    <div>
+                        <p><i class="fa fa-book" aria-hidden="true"></i> {{ warehouse.storage_temperature }}</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Workforce</h6>
+                    <div>
+                        <p><i class="fa fa-book" aria-hidden="true"></i> {{ warehouse.workforce }}</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Classification of warehouse</h6>
+                    <div>
+                        <p><i class="fa fa-book" aria-hidden="true"></i> {{ warehouse.warehouse_classification }}</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Type(s) of storage space</h6>
+                    <div>
+                        {% for space in warehouse.storage_space_type.all %}
+                        <p><i class="fa fa-book" aria-hidden="true"></i> {{ space.name }} </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-3 p-3 bg-light col-6" style="max-width:48%; margin:10px;">
+                <h3>
+                    <span><i class="fa fa-home" aria-hidden="true"></i> Services & operational information</span>
+                </h3>
+                <div>
+                    <h6 class="my-3">Services offered</h6>
+                    <div>
+
+                        {% for service in warehouse.services_offered.all %}
+                        <p><i class="fa fa-book" aria-hidden="true"></i> {{ service.name }} </p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Order taking time</h6>
+                    <div>
+                        <p>{{ warehouse.order_taking_time }}</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Flexibility on transport appointments</h6>
+                    <div>
+                        <p> {{ warehouse.flexibility_transport_appointments }} </p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Flexibility schedules</h6>
+                    <div>
+                        <p>{{ warehouse.flexible_hours }}</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Authorization of access by external persons on the site</h6>
+                    <div>
+                        <p>{{ warehouse.authorization_access_people_outside }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-3 p-3 bg-light col-6" style="max-width:48%; margin:10px;">
+                <h3>
+                    <span><i class="fa fa-home" aria-hidden="true"></i> Equipment and safety</span>
+                </h3>
+                <div>
+                    <h6 class="my-3">Handling equipment</h6>
+                    <div>
+
+                        {% for eq in warehouse.equipment.all %}
+                        <p> <i class="fa fa-book" aria-hidden="true"></i> {{ eq.name }}</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <div>
+                    <h6 class="my-3">Security</h6>
+                    <div>
+                        {% for secu in warehouse.security.all %}
+                        <p> <i class="fa fa-book" aria-hidden="true"></i> {{ secu.name }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-3 p-3 bg-light col-6" style="max-width:48%; margin:10px;">
+                <h3>
+                    <span><i class="fa fa-home" aria-hidden="true"></i> Accepted Products and Authorizations</span>
+                </h3>
+
+                <div>
+                    <h6 class="my-3">Insurance</h6>
+                    <div>
+                        <p><i class="fa fa-book" aria-hidden="true"></i> {{ warehouse.Insurance }} </p>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div>
+        <!-- Button trigger modal -->
+        <div class="text-center my-5">
+           {%if request.user.is_authenticated and request.user != warehouse.owner%}
+            <button type="button" class="btn btn-danger rounded-1 py-2 px-4 fs-4" data-bs-toggle="modal"
+                data-bs-target="#sendMessage">
+                Send Message
+            </button>
+           {%endif%}
+            {%if warehouse.size > 0 and request.user != warehouse.owner  %}
+            <a {% if request.user.is_authenticated and request.user.is_email_verified %}data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+           {% elif not request.user.is_email_verified and request.user.is_authenticated%}
+           href="{% url 'account:not_verified' %}"
+           {%else%}
+            href="/account/login/?next=/warehouse/{{warehouse.pk}}/"
+           {%endif%}
+                class="btn btn-primary rounded-1 py-2 px-4 fs-4">Request for quote</a>
+            {%endif%}
+        </div>
+
+        {% if request.user.is_authenticated and request.user.is_email_verified %}
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog "
+                style="max-width: 1000px !important; width: 100% !important; height: 60vh !important;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="staticBackdropLabel">Ask for a quote</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- multistep form -->
+                        <form id="msform" class="text-dark" method="POST">
+                            {% csrf_token %}
+                            <!-- progressbar -->
+                            <ul id="progressbar">
+                                <li class="active">YOUR PRODUCTS</li>
+                                <li>Time</li>
+                                <li>COORDINATES</li>
+                            </ul>
+                            <!-- fieldsets -->
+
+                            <fieldset>
+                                <div class="text-start ps-3 py-2"><b>Type of product</b></div>
+                                <select name="product_name" class="form-select rounded-20" aria-label="Type of product"
+                                    required>
+                                    {% for product in products %}
+                                    <option value="{{product.name}}"> {{ product.name }} </option>
+                                    {% endfor %}
+                                </select>
+
+                                <div class="text-start ps-3 py-2"><b>Quantity </b></div>
+                                <input name="quantity" class="rounded-20 py-2 fs-6" type="number" placeholder="Quantity"
+                                    required />
+
+                                <div class="text-start ps-3 py-2"><b>Area </b></div>
+                                <input name="area" class="rounded-20 py-2 fs-6" type="number" placeholder="Area"
+                                    required />
+
+                                <input type="button" name="next"  class="rounded-20 next action-button" value="Next" />
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="text-start ps-3 py-2"><b>Approximate start-up time</b></div>
+
+                                <select name="start_date" class="form-select rounded-20" required>
+                                    {% for sd in start_date %}
+                                    <option value="{{sd.name}}"> {{ sd.name }} </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="text-start ps-3 py-2"><b>Duration of storage</b></div>
+                                <select name="duration_storage" class="form-select rounded-20" required>
+                                    {% for du in duration_storage %}
+                                    <option value="{{du.name}}"> {{ du.name }} </option>
+                                    {% endfor %}
+                                </select>
+
+
+                                <input type="button" name="previous" class="previous action-button" value="Previous" />
+
+                                <input type="button" name="next" class="next action-button" value="Next" />
+                            </fieldset>
+                            <fieldset>
+
+                                {% if request.user.is_authenticated %}
+
+                                {% if request.user.first_name == ''  %}
+                                <div class="text-start ps-3 py-2"><b>First Name</b></div>
+                                <input type="text" name="first_name" placeholder="First Name" />
+                                {% endif %}
+                                {% if request.user.last_name == ''  %}
+                                <div class="text-start ps-3 py-2"><b>Last Name</b></div>
+                                <input type="text" name="last_name" placeholder="Last Name" />
+                                {% endif %}
+                                {% if request.user.company_name == ''  %}
+                                <div class="text-start ps-3 py-2"><b>Makhazin</b></div>
+                                <input type="text" name="company_name" placeholder="Makhazin" />
+                                {% endif %}
+                                {% if request.user.phone_number == ''  %}
+                                <div class="text-start ps-3 py-2"><b>Phone Numbe</b></div>
+                                <input type="text" name="phone_number" placeholder="Phone Number" />
+                                {% endif %}
+
+                                {% else %}
+
+                                <div class="text-start ps-3 py-2"><b>First Name</b></div>
+                                <input type="text" name="a_first_name" placeholder="First Name" />
+                                <div class="text-start ps-3 py-2"><b>Last Name</b></div>
+                                <input type="text" name="a_last_name" placeholder="Last Name" />
+                                <div class="text-start ps-3 py-2"><b>Email</b></div>
+                                <input type="email" name="a_email" placeholder="Email" />
+                                <div class="text-start ps-3 py-2"><b>Makhazin</b></div>
+                                <input type="text" name="a_company_name" placeholder="Makhazin" />
+                                <div class="text-start ps-3 py-2"><b>Phone Numbe</b></div>
+                                <input type="text" name="a_phone_number" placeholder="Phone Number" />
+                                <div class="form-check">
+                                    <input name="a_checkbox" type="checkbox" value="" id="flexCheckDefault">
+                                    <label for="flexCheckDefault"> By submitting this quote, I agree to create an
+                                        account.</label>
+                                </div>
+
+                                {% endif %}
+
+                                <input type="button" name="previous" class="previous action-button" value="Previous" />
+                                <button class="submit action-button">Submit</button>
+                            </fieldset>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {%endif%}
+        {% comment %} {%if request.user.is_authenticated and request.user != warehouse.owner%} {% endcomment %}
+        <div class="modal fade" id="sendMessage" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog "
+                style="max-width: 1000px !important; width: 100% !important; height: 60vh !important;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="">Send Message To Owner</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- multistep form -->
+                        <form id="messageForm" class="text-dark" method="POST">
+                            {% csrf_token %}
+                            <div class="text-start ps-3 py-2"><b>Subject </b></div>
+                            <input name="subject" class="form-control rounded-20 py-2 fs-6" type="text"
+                                value="About {{warehouse.name}}" required />
+
+                            <div class="text-start ps-3 py-2"><b>Message </b></div>
+
+                            <textarea name="message" class="form-control rounded-20 py-2 fs-6" placeholder="Your Message" required></textarea>
+
+                            <input type="submit" class="btn btn-secondary rounded-20 next action-button mt-2" value="Send" />
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% comment %} {%endif%} {% endcomment %}
+
+        <form action="{% url 'core:warehouse_details' warehouse.id %}" method="POST">
+            {% csrf_token %}
+            <h5>Write Your Review</h5>
+            <div class="col-4 mb-4">
+                {% if userbooking %}
+                <p>Choose Booking</p>
+                <select class="form-control" name="booking" required>
+                    <option value="" selected>--------</option>
+                    {%for booking in userbooking%}
+                    <option value="{{booking.id}}">{{booking}}</option>
+                    {%endfor%}
+                </select>
+                {% endif %}
+            </div>
+            <div>
+                <!-- Rating stars -->
+                <p style="float:left">How do you rate this warehouse?</p>
+                </br>
+                <fieldset class="rating">
+                    <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
+                        title="Awesome - 5 stars"></label>
+                    <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half"
+                        title="Pretty good - 4.5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"
+                        title="Pretty good - 4 stars"></label>
+                    <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half"
+                        title="Meh - 3.5 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"
+                        title="Meh - 3 stars"></label>
+                    <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half"
+                        title="Kinda bad - 2.5 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"
+                        title="Kinda bad - 2 stars"></label>
+                    <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half"
+                        title="Meh - 1.5 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"
+                        title="Sucks big time - 1 star"></label>
+                    <input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf"
+                        title="Sucks big time - 0.5 stars"></label>
+                    <input type="radio" class="reset-option" name="rating" value="reset" />
+                </fieldset>
+                <br>
+                <br>
+                Review:
+                <textarea name="review" rows="4" class="form-control"></textarea>
+                <br>
+                {% if request.user.is_authenticated %}
+                {% if userbooking %}
+                <input type="submit" value="Submit Review" class="btn btn-primary">
+                {% else %}
+                <p>You must book this warehouse to post a review.</p>
+                {% endif %}
+                {% else %}
+                <p>You must be logged in to post a review. <span><a href="{% url 'account:login' %}">Login
+                            now</a></span></p>
+                {% endif %}
+
+            </div>
+
+        </form>
+        <br>
+        <header class="section-heading">
+            <h3>Customer Reviews </h3>
+            <div class="rating-star">
+                <span style="color:#FFB503">
+                    <i class="fa fa-star{% if warehouse.averageReview < 0.5 %}-o{% elif warehouse.averageReview >= 0.5 and warehouse.averageReview < 1 %}-half {% endif %}"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 1.5 %}-o{% elif warehouse.averageReview >= 1.5 and warehouse.averageReview < 2 %}-half {% endif %}"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 2.5 %}-o{% elif warehouse.averageReview >= 2.5 and warehouse.averageReview < 3 %}-half {% endif %}"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 3.5 %}-o{% elif warehouse.averageReview >= 3.5 and warehouse.averageReview < 4 %}-half {% endif %}"
+                        aria-hidden="true"></i>
+                    <i class="fa fa-star{% if warehouse.averageReview < 4.5 %}-o{% elif warehouse.averageReview >= 4.5 and warehouse.averageReview < 5 %}-half {% endif %}"
+                        aria-hidden="true"></i>
+                    <span style="color:black">{{warehouse.countReview}} reviews</span>
+                </span>
+            </div>
+
+        </header>
+        <br>
+        {% for review in reviews %}
+        <article class="box mb-3">
+            <div class="icontext w-100">
+
+                <div class="text">
+                    <span class="date text-muted float-md-right">{{review.created_at}} </span>
+                    <h6 class="mb-1">{{review.booking.business.username}} </h6>
+                    <p class="mb-1">{{review.booking}} </p>
+                    <div class="rating-star">
+                        <span style="color:#FFB503">
+                            <i class="fa fa-star{% if review.business_rating == 0.5 %}-half{% elif review.business_rating < 1 %}-o {% endif %}"
+                                aria-hidden="true"></i>
+                            <i class="fa fa-star{% if review.business_rating == 1.5 %}-half{% elif review.business_rating < 2 %}-o {% endif %}"
+                                aria-hidden="true"></i>
+                            <i class="fa fa-star{% if review.business_rating == 2.5 %}-half{% elif review.business_rating < 3 %}-o {% endif %}"
+                                aria-hidden="true"></i>
+                            <i class="fa fa-star{% if review.business_rating == 3.5 %}-half{% elif review.business_rating < 4 %}-o {% endif %}"
+                                aria-hidden="true"></i>
+                            <i class="fa fa-star{% if review.business_rating == 4.5 %}-half{% elif review.business_rating < 5 %}-o {% endif %}"
+                                aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+            </div> <!-- icontext.// -->
+            <div class="mt-3">
+                <p>
+                    {{review.business_review}}
+                </p>
+            </div>
+        </article>
+        <hr>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock main %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock script %}

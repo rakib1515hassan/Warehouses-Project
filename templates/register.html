@@ -1,0 +1,185 @@
+{% load static %}
+{% include 'inc/_header.html' %}
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+{% comment %} {% load widget_tweaks %} {% endcomment %}
+<!-- Register start -->
+<div class="container-xxl py-5 register">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Create an account</h6>
+            <h1 class="mb-5">Register Your Account</h1>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+
+                {% for message in messages%}
+                <div class="alert alert-danger" role="alert">
+                    {{message}}
+                </div>
+                {% endfor %}
+                <form name="signup-form" method="POST" id="signup-form" action="{% url 'account:signup' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="row">
+                             <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="text" name="first_name" class="form-control" id="fname"
+                                    placeholder="First Name" value="{%if form.first_name.value %}{{form.first_name.value}}{%endif%}" required>
+                                <label for="fname">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="form-floating">
+                                <input type="text" name="last_name" class="form-control" id="lname" value="{%if form.last_name.value %}{{form.last_name.value}}{%endif%}" placeholder="Last Name " required>
+                                <label for="lname">Last Name</label>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <div class="form-floating">
+                                <input type="text" name="username" class="form-control" hx-get="validate_field/" hx-trigger="keyup changed delay:1s" hx-swap="outerhtml" hx-target="#error-message-username"  id="user_name"
+                                    placeholder="User Name" value="{%if form.username.value %}{{form.username.value}}{%endif%}"  required>
+                                <label for="user_name">Username</label>
+                            </div>
+                             <div id="error-message-username"></div>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <div class="form-floating">
+                                <input type="email" name="email" class="form-control" hx-get="validate_field/" hx-trigger="keyup changed delay:1s" hx-swap="outerhtml" hx-target="#error-message-email" id="email"
+                                       placeholder="Email " value="{%if form.email.value %}{{form.email.value}}{%endif%}" required>
+                                <label for="email">Email</label>
+                            </div>
+                            <div id="error-message-email">
+                                <div class="text-danger">
+                                {% if "email" in form.errors %}
+        {% for error in form.errors.email %}
+            {{ error }}
+        {% endfor %}
+{% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 mb-4">
+                            <div class="form-floating">
+                                   <select class="form-select" id="account_type" onchange="toggleCompanyNameField()" name="account_type" aria-label="Floating label select example">
+    <option value="BUSINESS" selected>Business</option>
+    <option value="WAREHOUSE_OWNER">Warehouse Owner</option>
+  </select>
+  <label for="account_type">Account Type</label>
+                            </div>
+                        </div>
+                         <div class="col-12 mb-4" id="company" style="display: none">
+                            <div class="form-floating">
+                                     <input type="text" name="company_name" class="form-control" id="company_name"
+                                            value="{%if form.company_name.value %}{{form.company_name.value}}{%endif%}" placeholder="Company Name ">
+                                <label for="company_name">Company Name</label>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <div class="form-floating">
+                                <input type="password" name="password" class="form-control" id="password"
+                                    placeholder="Password" minlength="6" required>
+                                <label for="password">Password</label>
+                            </div>
+                        {% if "password" in form.errors %}
+                        <div class="text-danger">
+                            {% for error in form.errors.password %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {%endif%}
+
+                        </div>
+                        <div class="col-12 mb-4">
+                            <div class="form-floating">
+                                <input type="password" name="confirm_password" class="form-control" id="cpassword"
+                                    placeholder="Password" minlength="6" onchange="passwordmatched()" required>
+                                <label for="cpassword">Confirm Password</label>
+                            </div>
+
+                        <div class="text-danger" id="confirm_password_div">
+                            {% if "confirm_password" in form.errors %}
+                            {% for error in form.errors.confirm_password %}
+                                {{ error }}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        </div>
+                    </div> 
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-primary w-100 py-3" type="submit">Create an account</button>
+                    </div>
+               <div class="col-12 my-4">
+                        <p class="text-center m-0">Or register with your social media</p>
+                    </div>
+                 <div class="col-12 mb-4">
+                            <div
+                                class="register-media d-flex flex-column justify-content-center align-items-center gap-2">
+                                <a href="{% url 'social:begin' 'google-oauth2' %}" class="px-3 py-2 border border-1 rounded-pill">
+                                    <svg width="25" height="25" class="gr ag">
+                                        <g fill="none" fill-rule="evenodd">
+                                            <path
+                                                d="M20.66 12.7c0-.61-.05-1.19-.15-1.74H12.5v3.28h4.58a3.91 3.91 0 0 1-1.7 2.57v2.13h2.74a8.27 8.27 0 0 0 2.54-6.24z"
+                                                fill="#4285F4"></path>
+                                            <path
+                                                d="M12.5 21a8.1 8.1 0 0 0 5.63-2.06l-2.75-2.13a5.1 5.1 0 0 1-2.88.8 5.06 5.06 0 0 1-4.76-3.5H4.9v2.2A8.5 8.5 0 0 0 12.5 21z"
+                                                fill="#34A853"></path>
+                                            <path
+                                                d="M7.74 14.12a5.11 5.11 0 0 1 0-3.23v-2.2H4.9A8.49 8.49 0 0 0 4 12.5c0 1.37.33 2.67.9 3.82l2.84-2.2z"
+                                                fill="#FBBC05"></path>
+                                            <path
+                                                d="M12.5 7.38a4.6 4.6 0 0 1 3.25 1.27l2.44-2.44A8.17 8.17 0 0 0 12.5 4a8.5 8.5 0 0 0-7.6 4.68l2.84 2.2a5.06 5.06 0 0 1 4.76-3.5z"
+                                                fill="#EA4335"></path>
+                                        </g>
+                                    </svg>
+                                    Sign up with Google
+                                </a>
+                                <a href="#" class="px-3 py-2 border border-1 rounded-pill">
+                                    <svg width="25" height="25" fill="#3B5998" class="gr ag">
+                                        <path
+                                            d="M20.3 4H4.7a.7.7 0 0 0-.7.7v15.6c0 .38.32.7.7.7h8.33v-6.38h-2.12v-2.65h2.12V9.84c0-2.2 1.4-3.27 3.35-3.27.94 0 1.75.07 1.98.1v2.3H17c-1.06 0-1.31.5-1.31 1.24v1.76h2.65l-.53 2.65H15.7l.04 6.38h4.56a.7.7 0 0 0 .71-.7V4.7a.7.7 0 0 0-.7-.7"
+                                            fill-rule="evenodd"></path>
+                                    </svg>
+                                    Sign up with Facebook
+                                </a>
+                            </div>
+                        </div>
+
+            </form>
+
+            <div class="col-12 my-4">
+                <p class="text-center m-0">Already have an account? <a href="{% url 'account:login' %}">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+     function toggleCompanyNameField() {
+    var accountTypeField = document.getElementById('account_type');
+    var companyNameField = document.getElementById('company');
+
+    if (accountTypeField.value === 'BUSINESS') {
+        companyNameField.style.display="none";
+    } else {
+        companyNameField.style.display="block";
+    }
+}
+ function passwordmatched() {
+    var password = document.getElementById('password');
+    var cpassword = document.getElementById('cpassword');
+
+    if (password.value === cpassword.value) {
+         confirm_password_div = document.getElementById("confirm_password_div")
+        confirm_password_div.innerText="";
+    } else {
+        confirm_password_div = document.getElementById("confirm_password_div")
+        confirm_password_div.innerText="Password doesn't match";
+    }
+}
+</script>
+<!-- Register end -->
+
+{% include 'inc/_footer.html' %}
